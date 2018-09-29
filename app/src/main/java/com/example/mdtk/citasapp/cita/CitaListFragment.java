@@ -48,6 +48,8 @@ import java.util.Locale;
 import java.util.Map;
 
 import static android.content.ContentValues.TAG;
+import static com.example.mdtk.citasapp.proveedor.EmpleadoProveedor.getList;
+import static com.example.mdtk.citasapp.proveedor.LoginProveedor.getDefault;
 
 public class CitaListFragment extends ListFragment
 		implements LoaderManager.LoaderCallbacks<Cursor> {
@@ -131,11 +133,8 @@ public class CitaListFragment extends ListFragment
 
 		spnEmpleado = (Spinner)v.findViewById(R.id.spnEmpleado);
 		ArrayList<Empleado> empleadoList = new ArrayList<>();
-		empleadoList.add(new Empleado(0, "Todos"));
-		empleadoList.add(new Empleado(1, "Celeste"));
-		empleadoList.add(new Empleado(2, "Richard"));
-		empleadoList.add(new Empleado(3, "Victoria"));
-		empleadoList.add(new Empleado(4, "Eloy"));
+		empleadoList.add(new Empleado(0,"Todos",""));
+		empleadoList.addAll(getList(getActivity().getContentResolver()));
 		ArrayAdapter<Empleado> adapter = new ArrayAdapter<Empleado>(v.getContext(), android.R.layout.simple_spinner_dropdown_item, empleadoList);
 		spnEmpleado.setAdapter(adapter);
 		spnEmpleado.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -156,8 +155,15 @@ public class CitaListFragment extends ListFragment
             public void onNothingSelected(AdapterView<?> parent) {
             }
         });
-		spnEmpleado.setSelection(1);//por defecto CELESTE
 
+		int posicionEmpleado = 0;
+		for(Empleado e : empleadoList){
+			if(e.getID() == getDefault(getActivity().getContentResolver())) {
+				spnEmpleado.setSelection(posicionEmpleado);
+				break;
+			}
+			posicionEmpleado++;
+		}
 
 		//set initial title
 		txtMes = (TextView) v.findViewById(R.id.txtMes);

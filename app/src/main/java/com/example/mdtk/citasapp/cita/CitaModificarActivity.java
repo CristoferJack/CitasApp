@@ -28,6 +28,9 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
+
+import static com.example.mdtk.citasapp.proveedor.EmpleadoProveedor.getList;
 
 public class CitaModificarActivity extends AppCompatActivity {
     int citaId;
@@ -59,12 +62,7 @@ public class CitaModificarActivity extends AppCompatActivity {
         editTextCitaFecha =(EditText) findViewById(R.id.editTextCitaFecha);
         editTextCitaHora =(EditText) findViewById(R.id.editTextCitaHora);
         spnEmpleado = (Spinner)findViewById(R.id.spnEmpleadoD);
-        ArrayList<Empleado> empleadoList = new ArrayList<>();
-        empleadoList.add(new Empleado(0, "Seleccione"));
-        empleadoList.add(new Empleado(1, "Celeste"));
-        empleadoList.add(new Empleado(2, "Richard"));
-        empleadoList.add(new Empleado(3, "Victoria"));
-        empleadoList.add(new Empleado(4, "Eloy"));
+        List<Empleado> empleadoList = getList(getContentResolver());
         ArrayAdapter<Empleado> adapter = new ArrayAdapter<Empleado>(this, android.R.layout.simple_spinner_dropdown_item, empleadoList);
         spnEmpleado.setAdapter(adapter);
         spnEmpleado.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {

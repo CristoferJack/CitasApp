@@ -32,6 +32,10 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
+
+import static com.example.mdtk.citasapp.proveedor.EmpleadoProveedor.getList;
+import static com.example.mdtk.citasapp.proveedor.LoginProveedor.getDefault;
 
 public class CitaInsertarActivity extends AppCompatActivity{
 
@@ -65,12 +69,7 @@ public class CitaInsertarActivity extends AppCompatActivity{
         //editTextCitaFecha.setEnabled(false);
 
         spnEmpleado = (Spinner)findViewById(R.id.spnEmpleadoD);
-        ArrayList<Empleado> empleadoList = new ArrayList<>();
-        empleadoList.add(new Empleado(0, "Seleccione"));
-        empleadoList.add(new Empleado(1, "Celeste"));
-        empleadoList.add(new Empleado(2, "Richard"));
-        empleadoList.add(new Empleado(3, "Victoria"));
-        empleadoList.add(new Empleado(4, "Eloy"));
+        List<Empleado> empleadoList = getList(getContentResolver());
         ArrayAdapter<Empleado> adapter = new ArrayAdapter<Empleado>(this, android.R.layout.simple_spinner_dropdown_item, empleadoList);
         spnEmpleado.setAdapter(adapter);
         spnEmpleado.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -84,7 +83,15 @@ public class CitaInsertarActivity extends AppCompatActivity{
             public void onNothingSelected(AdapterView<?> parent) {
             }
         });
-        spnEmpleado.setSelection(1);
+
+        int posicionEmpleado = 0;
+        for(Empleado e : empleadoList){
+            if(e.getID() == getDefault(getContentResolver())) {
+                spnEmpleado.setSelection(posicionEmpleado);
+                break;
+            }
+            posicionEmpleado++;
+        }
     }
 
     @Override
