@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/menu_borrar"
+        android:title="Borrar"
+        android:icon="@drawable/ic_action_borrar"
+        app:showAsAction="always"/>
+
+    <item
+        android:id="@+id/menu_editar"
+        android:title="Editar"
+        android:icon="@drawable/ic_action_editar"
+        app:showAsAction="always"/>
+
+</menu>

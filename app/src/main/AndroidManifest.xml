@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.example.mdtk.citasapp">
+
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme">
+        <activity android:name=".cita.CitaActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+<!--        <activity
+            android:name=".cita.CitaActivity"
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+
+            &lt;!&ndash; Parent activity meta-data to support 4.0 and lower &ndash;&gt;
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".MainActivity" />
+        </activity>-->
+
+        <provider
+            android:name=".proveedor.ProveedorDeContenido"
+            android:authorities="com.example.mdtk.citasapp.proveedor.ProveedorDeContenido"
+            android:enabled="true"
+            android:exported="true" />
+
+        <activity android:name=".cita.CitaInsertarActivity"
+            android:parentActivityName=".cita.CitaActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+
+            <!-- Parent activity meta-data to support 4.0 and lower -->
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".cita.CitaActivity" />
+        </activity>
+
+        <activity android:name=".cita.CitaModificarActivity"
+            android:parentActivityName=".cita.CitaActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+
+            <!-- Parent activity meta-data to support 4.0 and lower -->
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".cita.CitaActivity" />
+        </activity>
+
+    </application>
+
+</manifest>

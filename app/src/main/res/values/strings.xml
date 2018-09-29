@@ -1,0 +1,19 @@
+<resources>
+    <string name="app_name">Programate</string>
+    <string name="title_activity_main2">Main2Activity</string>
+    <string name="title_home">Home</string>
+    <string name="title_dashboard">Dashboard</string>
+    <string name="title_notifications">Notifications</string>
+    <string name="sin_datos">Sin datos.</string>
+
+    <string name="cita_servicio">Servicio</string>
+    <string name="cita_cliente">Cliente</string>
+    <string name="cita_fecha">Fecha</string>
+    <string name="cita_nota">Nota</string>
+    <string name="cita_hora">Hora</string>
+    <string name="campo_requerido">Campo requerido</string>
+
+    <string name="citas_cabecera">Citas programadas:</string>
+
+    <string name="progress_cargando_datos">Cargando datos&#8230;</string>
+</resources>

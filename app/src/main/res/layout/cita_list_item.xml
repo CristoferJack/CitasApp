@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- android:background="@drawable/list_selector" -->
+<LinearLayout android:id="@+id/LLCiclo"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content" 
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    >
+
+	<LinearLayout
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:orientation="horizontal">
+
+	<ImageView android:layout_width="60dp"
+		android:layout_height="60dp"
+		android:layout_gravity="center_vertical"
+		android:layout_marginLeft="@dimen/appbar_padding_top"
+		android:id="@+id/image_view"/>
+
+		<LinearLayout
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:layout_marginLeft="@dimen/appbar_padding_top"
+			android:orientation="vertical">
+
+			<TextView
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:id="@+id/textview_ciclo_list_item_servicio"
+				android:layout_marginTop="@dimen/appbar_padding_top"
+				android:layout_marginBottom="@dimen/appbar_padding_top"/>
+			<TextView
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:id="@+id/textview_ciclo_list_item_cliente"
+				android:layout_marginBottom="@dimen/appbar_padding_top"/>
+		</LinearLayout>
+	</LinearLayout>
+
+</LinearLayout>
