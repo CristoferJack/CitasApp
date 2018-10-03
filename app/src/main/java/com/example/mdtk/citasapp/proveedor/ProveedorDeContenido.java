@@ -19,7 +19,6 @@ import android.text.TextUtils;
 import android.util.SparseArray;
 
 public class ProveedorDeContenido extends ContentProvider {
-    //private static final String LOGTAG = "Tiburcio - ProveedorDeContenido";
 
     private static final int CITA_ONE_REG = 1;
     private static final int CITA_ALL_REGS = 2;

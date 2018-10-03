@@ -19,8 +19,7 @@ public class Cita {
         this.empleadoID = empleadoID;
     }
 
-    public Cita() {
-    }
+    public Cita() { }
 
     public int getEmpleadoID() {
         return empleadoID;
