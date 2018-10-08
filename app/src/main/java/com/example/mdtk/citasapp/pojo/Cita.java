@@ -1,32 +1,51 @@
 package com.example.mdtk.citasapp.pojo;
 
-import com.example.mdtk.citasapp.constantes.G;
-
 public class Cita {
     private int ID;
     private String servicio;
     private String cliente;
     private String nota;
     private String fechaHora;
-    private int empleadoID;
+    private int id_trabajador;
+    private int id_trabajador_registro;
+    private int estado;
 
-    public Cita(int ID, String servicio, String cliente, String nota, String fechaHora,int empleadoID) {
+    public Cita() { }
+
+    public Cita(int ID, String servicio, String cliente, String nota, String fechaHora,
+                int id_trabajador, int id_trabajador_registro, int estado) {
         this.ID = ID;
         this.servicio = servicio;
         this.cliente = cliente;
         this.nota = nota;
         this.fechaHora = fechaHora;
-        this.empleadoID = empleadoID;
+        this.id_trabajador = id_trabajador;
+        this.id_trabajador_registro = id_trabajador_registro;
+        this.estado = estado;
     }
 
-    public Cita() { }
-
-    public int getEmpleadoID() {
-        return empleadoID;
+    public int getEstado() {
+        return estado;
     }
 
-    public void setEmpleadoID(int empleadoID) {
-        this.empleadoID = empleadoID;
+    public void setEstado(int estado) {
+        this.estado = estado;
+    }
+
+    public int getId_trabajador_registro() {
+        return id_trabajador_registro;
+    }
+
+    public void setId_trabajador_registro(int id_trabajador_registro) {
+        this.id_trabajador_registro = id_trabajador_registro;
+    }
+
+    public int getId_trabajador() {
+        return id_trabajador;
+    }
+
+    public void setId_trabajador(int id_trabajador) {
+        this.id_trabajador = id_trabajador;
     }
 
     public String getFechaHora() {

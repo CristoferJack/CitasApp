@@ -19,13 +19,15 @@ public class Contrato {
         public static final String CLIENTE = "cliente";
         public static final String NOTA = "nota";
         public static final String FECHA_HORA = "fechaHora";
-        public static final String EMPLEADO_ID = "empleadoId";
+        public static final String ID_TRABAJADOR = "id_trabajador";
+        public static final String ID_TRABAJADOR_REGISTRO = "id_trabajador_registro";
+        public static final String ESTADO = "estado";
     }
 
-    public static final class Empleado implements BaseColumns {
+    public static final class Trabajador implements BaseColumns {
 
         public static final Uri CONTENT_URI = Uri
-                .parse("content://"+AUTHORITY+"/Empleado");
+                .parse("content://"+AUTHORITY+"/Trabajador");
 
         // Table column
         public static final String NOMBRES = "nombres";
@@ -38,7 +40,18 @@ public class Contrato {
                 .parse("content://"+AUTHORITY+"/Login");
 
         // Table column
-        public static final String EMPLEADO_ID = "empleadoID";
+        public static final String ID_TRABAJADOR_REGISTRO = "id_trabajador_registro";
         public static final String ESTADO = "estado";
+    }
+
+    public static final class Sincronizacion implements BaseColumns {
+
+        public static final Uri CONTENT_URI = Uri
+                .parse("content://"+AUTHORITY+"/SincronizacionRegistro");
+
+        // Table column
+        public static final String ID_CITA = "id_cita";
+        public static final String OPERACION = "operacion";
+        public static final String ID_TRABAJADOR_REGISTRO = "id_trabajador_registro";
     }
 }

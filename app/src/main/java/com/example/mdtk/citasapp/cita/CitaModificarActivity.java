@@ -19,18 +19,17 @@ import com.example.mdtk.citasapp.constantes.G;
 import com.example.mdtk.citasapp.dialog.DateDialog;
 import com.example.mdtk.citasapp.dialog.TimeDialog;
 import com.example.mdtk.citasapp.pojo.Cita;
-import com.example.mdtk.citasapp.pojo.Empleado;
+import com.example.mdtk.citasapp.pojo.Trabajador;
 import com.example.mdtk.citasapp.proveedor.CitaProveedor;
 import com.example.mdtk.citasapp.proveedor.Contrato;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
-import static com.example.mdtk.citasapp.proveedor.EmpleadoProveedor.getList;
+import static com.example.mdtk.citasapp.proveedor.TrabajadorProveedor.getList;
+import static com.example.mdtk.citasapp.proveedor.LoginProveedor.getDefault;
 
 public class CitaModificarActivity extends AppCompatActivity {
     int citaId;
@@ -45,7 +44,8 @@ public class CitaModificarActivity extends AppCompatActivity {
     SimpleDateFormat simpleTime = new SimpleDateFormat("HH:mm");
     SimpleDateFormat simpleDateBase =  new SimpleDateFormat("yyyy-MM-dd");
     Spinner spnEmpleado;
-    int empleadoId = 0;
+    int id_trabajador = 0;
+    int id_trabajador_registro = 0;
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,14 +62,14 @@ public class CitaModificarActivity extends AppCompatActivity {
         editTextCitaFecha =(EditText) findViewById(R.id.editTextCitaFecha);
         editTextCitaHora =(EditText) findViewById(R.id.editTextCitaHora);
         spnEmpleado = (Spinner)findViewById(R.id.spnEmpleadoD);
-        List<Empleado> empleadoList = getList(getContentResolver());
-        ArrayAdapter<Empleado> adapter = new ArrayAdapter<Empleado>(this, android.R.layout.simple_spinner_dropdown_item, empleadoList);
+        List<Trabajador> trabajadorList = getList(getContentResolver());
+        ArrayAdapter<Trabajador> adapter = new ArrayAdapter<Trabajador>(this, android.R.layout.simple_spinner_dropdown_item, trabajadorList);
         spnEmpleado.setAdapter(adapter);
         spnEmpleado.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                Empleado empleado = (Empleado) parent.getSelectedItem();
-                empleadoId = empleado.getID();
+                Trabajador trabajador = (Trabajador) parent.getSelectedItem();
+                id_trabajador = trabajador.getID();
             }
 
             @Override
@@ -81,8 +81,8 @@ public class CitaModificarActivity extends AppCompatActivity {
         Cita cita = CitaProveedor.readRecord(getContentResolver(), citaId);
 
         int posicionEmpleado = 0;
-        for(Empleado e : empleadoList){
-            if(e.getID() == cita.getEmpleadoID()) {
+        for(Trabajador e : trabajadorList){
+            if(e.getID() == cita.getId_trabajador()) {
                 spnEmpleado.setSelection(posicionEmpleado);
                 break;
             }
@@ -97,13 +97,13 @@ public class CitaModificarActivity extends AppCompatActivity {
             String fec = cita.getFechaHora();
             Date ff = simpleDateTime.parse(fec);
             editTextCitaFecha.setText( simpleDate.format(ff));
-            //editTextCitaFecha.setEnabled(false);
             editTextCitaHora.setText(simpleTime.format(simpleDateTime.parse(cita.getFechaHora())));
 
             fecha= simpleDateBase.format(simpleDateTime.parse(cita.getFechaHora()));
         } catch (ParseException e) {
             e.printStackTrace();
         }
+        id_trabajador_registro = getDefault(getContentResolver());
     }
 
     @Override
@@ -157,7 +157,7 @@ public class CitaModificarActivity extends AppCompatActivity {
             editTextHora.requestFocus();
             return;
         }
-        if(empleadoId==0){
+        if(id_trabajador ==0){
             editTextHora.setError(getString(R.string.campo_requerido));
             editTextHora.requestFocus();
             return;
@@ -165,8 +165,8 @@ public class CitaModificarActivity extends AppCompatActivity {
 
         String fechaHora = fecha+ " " +horaStr;
 
-        Cita cita = new Cita(citaId, servicio ,cliente,nota,fechaHora,empleadoId);
-        CitaProveedor.updateRecord(getContentResolver(), cita);
+        Cita cita = new Cita(citaId, servicio ,cliente,nota,fechaHora, id_trabajador,id_trabajador_registro,G.ESTADO_REGISTRADA);
+        CitaProveedor.updateRecordSincronizacion(getContentResolver(), cita);
 
         finish();
     }

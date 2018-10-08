@@ -10,10 +10,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.mdtk.citasapp.cita.CitaActivity;
-import com.example.mdtk.citasapp.pojo.Empleado;
+import com.example.mdtk.citasapp.pojo.Trabajador;
 import com.example.mdtk.citasapp.pojo.Login;
 
-import static com.example.mdtk.citasapp.proveedor.EmpleadoProveedor.validarLogin;
+import static com.example.mdtk.citasapp.proveedor.TrabajadorProveedor.validarLogin;
 import static com.example.mdtk.citasapp.proveedor.LoginProveedor.getDefault;
 import static com.example.mdtk.citasapp.proveedor.LoginProveedor.updateRecord;
 
@@ -60,9 +60,9 @@ public class MainActivity extends AppCompatActivity {
         String telefono = txtLoginTelefono.getText().toString();
         //String password = _passwordText.getText().toString();
 
-        Empleado empleado = validarLogin(getContentResolver(), telefono);
-        if(empleado!=null){
-            Login login =  new Login(1,empleado.getID(),1);
+        Trabajador trabajador = validarLogin(getContentResolver(), telefono);
+        if(trabajador !=null){
+            Login login =  new Login(1, trabajador.getID(),1);
             updateRecord(getContentResolver(),login );
 
             Intent intent = new Intent(MainActivity.this, CitaActivity.class);

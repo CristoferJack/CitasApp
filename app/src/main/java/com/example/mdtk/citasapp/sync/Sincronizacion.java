@@ -1,0 +1,146 @@
+package com.example.mdtk.citasapp.sync;
+
+import android.content.ContentResolver;
+import android.content.Context;
+import android.util.Log;
+
+import com.example.mdtk.citasapp.constantes.G;
+import com.example.mdtk.citasapp.pojo.Cita;
+import com.example.mdtk.citasapp.pojo.SincronizacionRegistro;
+import com.example.mdtk.citasapp.proveedor.CitaProveedor;
+import com.example.mdtk.citasapp.proveedor.SincronizacionRegistroProveedor;
+import com.example.mdtk.citasapp.volley.CitaVolley;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+
+/**
+ * Created by Tiburcio on 28/10/2015.
+ */
+public class Sincronizacion {
+    private static final String LOGTAG = "Tiburcio - Sincronizacion";
+    private static ContentResolver resolvedor;
+    private static Context contexto;
+    private static boolean esperandoRespuestaDeServidor = false;
+
+    public Sincronizacion(Context contexto){
+        this.resolvedor = contexto.getContentResolver();
+        this.contexto = contexto;
+        //recibirActualizacionesDelServidor(); //La primera vez se cargan los datos siempre
+    }
+
+    public synchronized static boolean isEsperandoRespuestaDeServidor() {
+        return esperandoRespuestaDeServidor;
+    }
+
+    public synchronized static void setEsperandoRespuestaDeServidor(boolean esperandoRespuestaDeServidor) {
+        Sincronizacion.esperandoRespuestaDeServidor = esperandoRespuestaDeServidor;
+    }
+
+    public synchronized boolean sincronizar(){
+        Log.i("sincronizacion","SINCRONIZAR");
+
+        if(isEsperandoRespuestaDeServidor()){
+            return true;
+        }
+
+        recibirActualizacionesDelServidor();
+        enviarActualizacionesAlServidor();
+
+        return true;
+    }
+
+
+
+    private static void enviarActualizacionesAlServidor(){
+        ArrayList<SincronizacionRegistro> registrosBitacora = SincronizacionRegistroProveedor.readAllRecord(resolvedor);
+        for(SincronizacionRegistro sincronizacionRegistro : registrosBitacora){
+
+            switch(sincronizacionRegistro.getOperacion()){
+                case G.OPERACION_INSERTAR:
+                    Cita cita = null;
+                    try {
+                        cita = CitaProveedor.readRecord(resolvedor, sincronizacionRegistro.getId_cita());
+                        CitaVolley.addCita(cita, true, sincronizacionRegistro.getID());
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    break;
+                case G.OPERACION_MODIFICAR:
+                    try {
+                        cita = CitaProveedor.readRecord(resolvedor, sincronizacionRegistro.getId_cita());
+                        CitaVolley.updateCita(cita, true, sincronizacionRegistro.getID());
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    break;
+                case G.OPERACION_ELIMINAR:
+                    CitaVolley.delCiclo(sincronizacionRegistro.getId_cita(), true, sincronizacionRegistro.getID());
+                    break;
+            }
+            Log.i("sincronizacion", "acabo de enviar");
+        }
+    }
+
+    private static void recibirActualizacionesDelServidor(){
+        CitaVolley.getAllCicloByHistorial();
+    }
+
+    public static void realizarActualizacionesDelServidorUnaVezRecibidas(JSONArray jsonArray){
+        Log.i("sincronizacion", "recibirActualizacionesDelServidor");
+
+        try {
+            ArrayList<Integer> identificadoresDeRegistrosActualizados = new ArrayList<Integer>();
+            ArrayList<Cita> registrosNuevos = new ArrayList<>();
+            ArrayList<Cita> registrosViejos = CitaProveedor.readAllRecord(resolvedor);
+            ArrayList<Integer> identificadoresDeRegistrosViejos = new ArrayList<Integer>();
+            for(Cita i : registrosViejos) identificadoresDeRegistrosViejos.add(i.getID());
+
+            JSONObject obj = null;
+            for (int i = 0; i < jsonArray.length(); i++ ){
+                obj = jsonArray.getJSONObject(i);
+                registrosNuevos.add(new Cita(
+                        obj.getInt("id_actividad"),
+                        obj.getString("servicio"),
+                        obj.getString("cliente"),
+                        obj.getString("nota"),
+                        obj.getString("fechaHora"),
+                        obj.getInt("id_trabajador"),
+                        obj.getInt("id_trabajador_registro"),
+                        obj.getInt("estado"))
+                );
+            }
+
+            for(Cita cita: registrosNuevos) {
+                try {
+                    if(identificadoresDeRegistrosViejos.contains(cita.getID())) {
+                        CitaProveedor.updateRecord(resolvedor, cita);
+                    } else {
+                        CitaProveedor.insertRecord(resolvedor, cita);
+                    }
+                    identificadoresDeRegistrosActualizados.add(cita.getID());
+                } catch (Exception e){
+                    Log.i("sincronizacion",
+                            "Probablemente el registro ya existía en la BD."+"" +
+                                    " Esto se podría controlar mejor con una Bitácora.");
+                }
+            }
+
+            for(Cita cita: registrosViejos){
+                if(!identificadoresDeRegistrosActualizados.contains(cita.getID())){
+                    try {
+                        CitaProveedor.deleteRecord(resolvedor, cita.getID());
+                    }catch(Exception e){
+                        Log.i("sincronizacion", "Error al borrar el registro con id:" + cita.getID());
+                    }
+                }
+            }
+
+            //CitaVolley.getAllCiclo(); //Los baja y los guarda en SQLite
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+}

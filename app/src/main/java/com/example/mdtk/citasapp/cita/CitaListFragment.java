@@ -6,13 +6,11 @@ import android.database.Cursor;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.v4.app.ListFragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v4.widget.CursorAdapter;
-import android.util.Log;
 import android.view.ActionMode;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -22,7 +20,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.CalendarView;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -32,7 +29,7 @@ import com.amulyakhare.textdrawable.util.ColorGenerator;
 import com.example.mdtk.citasapp.R;
 import com.example.mdtk.citasapp.constantes.G;
 import com.example.mdtk.citasapp.pojo.Cita;
-import com.example.mdtk.citasapp.pojo.Empleado;
+import com.example.mdtk.citasapp.pojo.Trabajador;
 import com.example.mdtk.citasapp.proveedor.CitaProveedor;
 import com.example.mdtk.citasapp.proveedor.Contrato;
 import com.github.sundeepk.compactcalendarview.CompactCalendarView;
@@ -47,8 +44,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-import static android.content.ContentValues.TAG;
-import static com.example.mdtk.citasapp.proveedor.EmpleadoProveedor.getList;
+import static com.example.mdtk.citasapp.proveedor.TrabajadorProveedor.getList;
 import static com.example.mdtk.citasapp.proveedor.LoginProveedor.getDefault;
 
 public class CitaListFragment extends ListFragment
@@ -132,16 +128,16 @@ public class CitaListFragment extends ListFragment
 		calendarView = v.findViewById(R.id.calendarAgenda);
 
 		spnEmpleado = (Spinner)v.findViewById(R.id.spnEmpleado);
-		ArrayList<Empleado> empleadoList = new ArrayList<>();
-		empleadoList.add(new Empleado(0,"Todos",""));
-		empleadoList.addAll(getList(getActivity().getContentResolver()));
-		ArrayAdapter<Empleado> adapter = new ArrayAdapter<Empleado>(v.getContext(), android.R.layout.simple_spinner_dropdown_item, empleadoList);
+		ArrayList<Trabajador> trabajadorList = new ArrayList<>();
+		trabajadorList.add(new Trabajador(0,"Todos",""));
+		trabajadorList.addAll(getList(getActivity().getContentResolver()));
+		ArrayAdapter<Trabajador> adapter = new ArrayAdapter<Trabajador>(v.getContext(), android.R.layout.simple_spinner_dropdown_item, trabajadorList);
 		spnEmpleado.setAdapter(adapter);
 		spnEmpleado.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                Empleado empleado = (Empleado) parent.getSelectedItem();
-                empleadoId = empleado.getID();
+                Trabajador trabajador = (Trabajador) parent.getSelectedItem();
+                empleadoId = trabajador.getID();
 				getLoaderManager().restartLoader(0,null,CitaListFragment.this);
 
 				try {
@@ -157,7 +153,7 @@ public class CitaListFragment extends ListFragment
         });
 
 		int posicionEmpleado = 0;
-		for(Empleado e : empleadoList){
+		for(Trabajador e : trabajadorList){
 			if(e.getID() == getDefault(getActivity().getContentResolver())) {
 				spnEmpleado.setSelection(posicionEmpleado);
 				break;
@@ -191,7 +187,6 @@ public class CitaListFragment extends ListFragment
 	}
 
 	private void DisponibilidadDias(int empleadoId) throws ParseException {
-
 		Map<String,List<Cita>> cita = CitaProveedor.disponibilidadByEmpleado(getActivity().getContentResolver(),empleadoId);
 		calendarView.removeAllEvents();
 		for(Map.Entry<String, List<Cita>> c: cita.entrySet()){
@@ -208,7 +203,6 @@ public class CitaListFragment extends ListFragment
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
-		//Log.i(LOGTAG, "onActivityCreated");
 
 		mCallbacks = this;
 
@@ -252,7 +246,7 @@ public class CitaListFragment extends ListFragment
 			switch (menuItem.getItemId()){
 				case R.id.menu_borrar:
 					int cicloId = (Integer) viewSeleccionado.getTag();
-					CitaProveedor.deleteRecord(getActivity().getContentResolver(), cicloId);
+					CitaProveedor.deleteRecordSincronizacion(getActivity().getContentResolver(), cicloId);
 					break;
 				case R.id.menu_editar:
 					Intent intent = new Intent(getActivity(),CitaModificarActivity.class);
@@ -282,7 +276,7 @@ public class CitaListFragment extends ListFragment
 										  Contrato.Cita.SERVICIO,
 				                          Contrato.Cita.CLIENTE,
 				                          Contrato.Cita.FECHA_HORA,
-				                          Contrato.Cita.EMPLEADO_ID
+				                          Contrato.Cita.ID_TRABAJADOR
 										};
 
 		Uri baseUri = Contrato.Cita.CONTENT_URI;
@@ -295,8 +289,8 @@ public class CitaListFragment extends ListFragment
 		calFecha.set(Calendar.MONTH, month);
 		calFecha.set(Calendar.DATE, day);
 		String dia = simpleDateBase.format(calFecha.getTime());
-		String empleadoSelection = empleadoId==0?"":" AND "+Contrato.Cita.EMPLEADO_ID+" = '"+empleadoId+"'";
-		String selection = Contrato.Cita.FECHA_HORA+" like '"+dia+"%'" + empleadoSelection;
+		String empleadoSelection = empleadoId==0?"":" AND "+Contrato.Cita.ID_TRABAJADOR +" = '"+empleadoId+"'";
+		String selection = Contrato.Cita.FECHA_HORA+" like '"+dia+"%' AND estado ='" + G.ESTADO_REGISTRADA +"' "+ empleadoSelection;
 		String orderBy = "datetime("+Contrato.Cita.FECHA_HORA+") ASC";
 		return new CursorLoader(getActivity(),
 				baseUri, null, selection, null, orderBy);
@@ -310,6 +304,7 @@ public class CitaListFragment extends ListFragment
 		//nos suscribimos a la URI osea q cuando cambie o se borre se tiene q enterar y cambiar la inofrmacion de la lista
 		data.setNotificationUri(getActivity().getContentResolver(), laUriBase);
 		mAdapter.swapCursor(data);
+
 		try {
 			DisponibilidadDias(empleadoId);
 		} catch (ParseException e) {
@@ -342,7 +337,7 @@ public class CitaListFragment extends ListFragment
 			int ID = cursor.getInt(cursor.getColumnIndex(Contrato.Cita._ID));
 			String servicio = cursor.getString(cursor.getColumnIndex(Contrato.Cita.SERVICIO));
 			String cliente = cursor.getString(cursor.getColumnIndex(Contrato.Cita.CLIENTE));
-			String empleado = cursor.getString(cursor.getColumnIndex(Contrato.Cita.EMPLEADO_ID));
+			String empleado = cursor.getString(cursor.getColumnIndex(Contrato.Cita.ID_TRABAJADOR));
 
 			TextView textviewServicio = (TextView) view.findViewById(R.id.textview_ciclo_list_item_servicio);
 			textviewServicio.setText(servicio);

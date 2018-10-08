@@ -2,15 +2,15 @@ package com.example.mdtk.citasapp.pojo;
 
 public class Login {
     private int ID;
-    private int empleadoID;
+    private int id_trabajador_registro;
     private int estado;
 
     public Login() {
     }
 
-    public Login(int ID, int empleadoID, int estado) {
+    public Login(int ID, int id_trabajador_registro, int estado) {
         this.ID = ID;
-        this.empleadoID = empleadoID;
+        this.id_trabajador_registro = id_trabajador_registro;
         this.estado = estado;
     }
 
@@ -22,12 +22,12 @@ public class Login {
         this.ID = ID;
     }
 
-    public int getEmpleadoID() {
-        return empleadoID;
+    public int getId_trabajador_registro() {
+        return id_trabajador_registro;
     }
 
-    public void setEmpleadoID(int empleadoID) {
-        this.empleadoID = empleadoID;
+    public void setId_trabajador_registro(int id_trabajador_registro) {
+        this.id_trabajador_registro = id_trabajador_registro;
     }
 
     public int getEstado() {

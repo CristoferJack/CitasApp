@@ -1,14 +1,14 @@
 package com.example.mdtk.citasapp.pojo;
 
-public class Empleado {
+public class Trabajador {
     private int ID;
     private String nombres;
     private String telefono;
 
-    public Empleado() {
+    public Trabajador() {
     }
 
-    public Empleado(int ID, String nombres, String telefono) {
+    public Trabajador(int ID, String nombres, String telefono) {
         this.ID = ID;
         this.nombres = nombres;
         this.telefono = telefono;
