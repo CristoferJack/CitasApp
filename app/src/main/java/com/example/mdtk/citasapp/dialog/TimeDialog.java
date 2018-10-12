@@ -24,9 +24,9 @@ public class TimeDialog extends DialogFragment implements TimePickerDialog.OnTim
     public Dialog onCreateDialog(Bundle savedInstanceState) {
 
         // Use the current time as the default time in the dialog
-        final Calendar c = Calendar.getInstance(Locale.getDefault());
-        hour = c.get(Calendar.HOUR);
-        minute = c.get(Calendar.MINUTE);
+        //final Calendar c = Calendar.getInstance(Locale.getDefault());
+        hour = 0;//c.get(Calendar.HOUR);
+        minute = 0;//c.get(Calendar.MINUTE);
         //Create a new instance of TimePickerDialog and return it
         return new TimePickerDialog(getActivity(), this, hour, minute,false);
 

@@ -79,7 +79,9 @@ public class CitaInsertarActivity extends AppCompatActivity{
             }
         });
 
-        id_trabajador_registro = getDefault(getContentResolver());
+        int id_trabajador_seleccionado = bundle.getInt("id_trabajador_seleccionado");
+        id_trabajador_registro = id_trabajador_seleccionado==0? getDefault(getContentResolver()):id_trabajador_seleccionado;
+
         int posicionEmpleado = 0;
         for(Trabajador e : trabajadorList){
             if(e.getID() == id_trabajador_registro) {

@@ -1,5 +1,9 @@
 package com.example.mdtk.citasapp.aplicacion;
 
+/**
+ * Created by Cristofer B. on 09/10/2018.
+ */
+
 import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.app.Application;

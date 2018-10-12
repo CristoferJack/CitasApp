@@ -95,6 +95,7 @@ public class CitaListFragment extends ListFragment
 				date.putInt("Day", day);
 				date.putInt("Month", month);
 				date.putInt("Year", year);
+				date.putInt("id_trabajador_seleccionado", id_trabajador_seleccionado);
 				Intent intent = new Intent(getActivity(), CitaInsertarActivity.class);
 				intent.putExtras(date);
 				startActivity(intent);
@@ -110,7 +111,7 @@ public class CitaListFragment extends ListFragment
 	 */
 
 	Spinner spnEmpleado;
-	int empleadoId = 0;
+	int id_trabajador_seleccionado = 0;
 	TextView txtMes;
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -137,11 +138,11 @@ public class CitaListFragment extends ListFragment
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 Trabajador trabajador = (Trabajador) parent.getSelectedItem();
-                empleadoId = trabajador.getID();
+                id_trabajador_seleccionado = trabajador.getID();
 				getLoaderManager().restartLoader(0,null,CitaListFragment.this);
 
 				try {
-					DisponibilidadDias(empleadoId);
+					DisponibilidadDias(id_trabajador_seleccionado);
 				} catch (ParseException e) {
 					e.printStackTrace();
 				}
@@ -289,7 +290,7 @@ public class CitaListFragment extends ListFragment
 		calFecha.set(Calendar.MONTH, month);
 		calFecha.set(Calendar.DATE, day);
 		String dia = simpleDateBase.format(calFecha.getTime());
-		String empleadoSelection = empleadoId==0?"":" AND "+Contrato.Cita.ID_TRABAJADOR +" = '"+empleadoId+"'";
+		String empleadoSelection = id_trabajador_seleccionado ==0?"":" AND "+Contrato.Cita.ID_TRABAJADOR +" = '"+ id_trabajador_seleccionado +"'";
 		String selection = Contrato.Cita.FECHA_HORA+" like '"+dia+"%' AND estado ='" + G.ESTADO_REGISTRADA +"' "+ empleadoSelection;
 		String orderBy = "datetime("+Contrato.Cita.FECHA_HORA+") ASC";
 		return new CursorLoader(getActivity(),
@@ -306,7 +307,7 @@ public class CitaListFragment extends ListFragment
 		mAdapter.swapCursor(data);
 
 		try {
-			DisponibilidadDias(empleadoId);
+			DisponibilidadDias(id_trabajador_seleccionado);
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}
