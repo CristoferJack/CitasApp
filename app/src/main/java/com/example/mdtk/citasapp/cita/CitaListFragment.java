@@ -62,7 +62,7 @@ public class CitaListFragment extends ListFragment
 	int day;
 	int month;
 	int year;
-
+	int id_trabajador_registro = 0;
 	public static CitaListFragment newInstance() {
 		CitaListFragment f = new CitaListFragment();
 		return f;
@@ -151,10 +151,10 @@ public class CitaListFragment extends ListFragment
             public void onNothingSelected(AdapterView<?> parent) {
             }
         });
-
+		id_trabajador_registro = getDefault(getActivity().getContentResolver());
 		int posicionEmpleado = 0;
 		for(Trabajador e : trabajadorList){
-			if(e.getID() == getDefault(getActivity().getContentResolver())) {
+			if(e.getID() == id_trabajador_registro) {
 				spnEmpleado.setSelection(posicionEmpleado);
 				break;
 			}
@@ -246,7 +246,7 @@ public class CitaListFragment extends ListFragment
 			switch (menuItem.getItemId()){
 				case R.id.menu_borrar:
 					int cicloId = (Integer) viewSeleccionado.getTag();
-					CitaProveedor.deleteRecordSincronizacion(getActivity().getContentResolver(), cicloId);
+					CitaProveedor.deleteRecordSincronizacion(getActivity().getContentResolver(), cicloId,id_trabajador_registro);
 					break;
 				case R.id.menu_editar:
 					Intent intent = new Intent(getActivity(),CitaModificarActivity.class);

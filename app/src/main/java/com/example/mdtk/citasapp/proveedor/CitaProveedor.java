@@ -21,6 +21,9 @@ public class CitaProveedor {
     public static Uri insertRecord(ContentResolver resolver, Cita cita){
         Uri uri = Contrato.Cita.CONTENT_URI;
         ContentValues values = new ContentValues();
+        if(cita.getID()!= G.SIN_VALOR_INT){
+            values.put(Contrato.Cita._ID, cita.getID());
+        }
         values.put(Contrato.Cita.SERVICIO, cita.getServicio());
         values.put(Contrato.Cita.CLIENTE, cita.getCliente());
         values.put(Contrato.Cita.NOTA, cita.getNota());
@@ -47,21 +50,22 @@ public class CitaProveedor {
         return UUID.randomUUID().toString();
     }
 
-    public static void deleteRecord(ContentResolver resolver, int citaId){
+    public static void deleteRecord(ContentResolver resolver, int citaId,int id_trabajador_registro){
         //Uri uri = Uri.parse(Contrato.Cita.CONTENT_URI +"/"+ citaId);
         //resolver.delete(uri, null,null);
         Cita cita = readRecord(resolver,citaId);
         cita.setEstado(G.ESTADO_ANULADA);
+        cita.setId_trabajador_registro(id_trabajador_registro);
         updateRecord(resolver,cita);
     }
 
-    public static void deleteRecordSincronizacion(ContentResolver resolver, int citaId){
-        deleteRecord(resolver,citaId);
+    public static void deleteRecordSincronizacion(ContentResolver resolver, int citaId,int id_trabajador_registro){
+        deleteRecord(resolver,citaId,id_trabajador_registro);
 
         SincronizacionRegistro sincronizacionRegistro = new SincronizacionRegistro();
         sincronizacionRegistro.setId_cita(citaId);
         sincronizacionRegistro.setOperacion(G.OPERACION_ELIMINAR);
-        sincronizacionRegistro.setId_trabajador_registro(getDefault(resolver));
+        sincronizacionRegistro.setId_trabajador_registro(id_trabajador_registro);
         SincronizacionRegistroProveedor.insertRecord(resolver, sincronizacionRegistro);
     }
 
@@ -111,7 +115,7 @@ public class CitaProveedor {
     }
 
     static public ArrayList<Cita> readAllRecord(ContentResolver resolver){
-        Uri uri = Uri.parse(Contrato.Sincronizacion.CONTENT_URI+"");
+        Uri uri = Uri.parse(Contrato.Cita.CONTENT_URI+"");
 
         String[] projection = {
                 Contrato.Cita._ID,
@@ -129,7 +133,7 @@ public class CitaProveedor {
         Cita cita;
         while(cursor.moveToNext()){
             cita = new Cita();
-            cita.setID(cursor.getInt(cursor.getColumnIndex(Contrato.Sincronizacion._ID)));
+            cita.setID(cursor.getInt(cursor.getColumnIndex(Contrato.Cita._ID)));
             cita.setFechaHora(cursor.getString(cursor.getColumnIndex(Contrato.Cita.FECHA_HORA)));
             cita.setServicio(cursor.getString(cursor.getColumnIndex(Contrato.Cita.SERVICIO)));
             cita.setId_trabajador(cursor.getInt(cursor.getColumnIndex(Contrato.Cita.ID_TRABAJADOR)));

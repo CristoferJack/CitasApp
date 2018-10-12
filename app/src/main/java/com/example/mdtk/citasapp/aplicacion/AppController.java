@@ -5,6 +5,8 @@ import android.accounts.AccountManager;
 import android.app.Application;
 import android.content.ContentResolver;
 import android.content.Context;
+import android.content.SyncRequest;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
 
@@ -34,9 +36,10 @@ public class AppController extends Application {
     // An account type, in the form of a domain name
     public static final String ACCOUNT_TYPE = "com.example.mdtk.citasapp";
     // The account name
-    public static final String ACCOUNT = "Convalidaciones";
+    public static final String ACCOUNT = "SyncProgramate";
     // Sync interval constants
-    public static final long SYNC_INTERVAL = G.SYNC_INTERVAL; // cada 60 segundos
+    public static final int SYNC_INTERVAL = G.SYNC_INTERVAL ;//* 180;
+    public static final int SYNC_FLEXTIME = SYNC_INTERVAL/3;
 
     private Sincronizacion sincronizacion;
 
@@ -50,7 +53,7 @@ public class AppController extends Application {
         mInstance = this;
         resolvedor = getContentResolver();
 
-        activarSincronizacion();
+        configurePeriodicSync(SYNC_INTERVAL, SYNC_FLEXTIME);
     }
 
     public static ContentResolver getResolvedor(){
@@ -123,16 +126,35 @@ public class AppController extends Application {
         return newAccount;
     }
 
-    private void activarSincronizacion() {
+    private void configurePeriodicSync(int syncInterval, int flexTime) {
         // Create the dummy account
         mAccount = CreateSyncAccount(this);
         //Se lanza la sincronización siempre que hay conexión de INTERNET
 
-        //resolvedor.setIsSyncable(mAccount, AUTHORITY, 1); //Creo que no hace falta ponerlo porque ya está en el proveedor en el manifest android:syncable="true"
+       //resolvedor.setIsSyncable(mAccount, AUTHORITY, 1); //Creo que no hace falta ponerlo porque ya está en el proveedor en el manifest android:syncable="true"
         resolvedor.setSyncAutomatically(mAccount, AUTHORITY, true);
         resolvedor.setMasterSyncAutomatically(true);
-        resolvedor.addPeriodicSync(mAccount, AUTHORITY, Bundle.EMPTY, SYNC_INTERVAL);
+        resolvedor.addPeriodicSync(mAccount, AUTHORITY, new Bundle(), SYNC_INTERVAL);//Bundle.EMPTY
+
+/*        //////
+        //String authority = context.getString(R.string.content_authority);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            // we can enable inexact timers in our periodic sync
+            *//*SyncRequest request = new SyncRequest.Builder().
+                    syncPeriodic(syncInterval, flexTime).
+                    setSyncAdapter(mAccount, AUTHORITY).
+                    setExtras(new Bundle()).build();
+            resolvedor.requestSync(request);*//*
+            resolvedor.addPeriodicSync(mAccount,
+                    AUTHORITY, new Bundle(), flexTime);
+        } else {
+            resolvedor.addPeriodicSync(mAccount,
+                    AUTHORITY, new Bundle(), flexTime);
+        }
+        resolvedor.setSyncAutomatically(mAccount, AUTHORITY, true);
+        resolvedor.setMasterSyncAutomatically(true);*/
     }
+
 
     public Sincronizacion getSincronizacion() {
         return sincronizacion;
@@ -141,4 +163,5 @@ public class AppController extends Application {
     public void setSincronizacion(Sincronizacion sincronizacion) {
         this.sincronizacion = sincronizacion;
     }
+
 }

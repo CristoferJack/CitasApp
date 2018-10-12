@@ -28,7 +28,7 @@ public class ProveedorDeContenido extends ContentProvider {
     private SQLiteDatabase sqlDB;
     public DatabaseHelper dbHelper;
     private static final String DATABASE_NAME = "Programate.db";
-    private static final int DATABASE_VERSION = 11;
+    private static final int DATABASE_VERSION = 36;
 
     private static final String CITA_TABLE_NAME = "Cita";
     private static final String TRABAJADOR_TABLE_NAME = "Trabajador";
@@ -213,6 +213,12 @@ public class ProveedorDeContenido extends ContentProvider {
                     "VALUES (4,'Richard','994143183')");
             db.execSQL("INSERT INTO " + TRABAJADOR_TABLE_NAME + " (" +  Contrato.Trabajador._ID + "," + Contrato.Trabajador.NOMBRES + "," + Contrato.Trabajador.TELEFONO + ") " +
                     "VALUES (5,'Victoria','977422500')");
+            db.execSQL("INSERT INTO " + TRABAJADOR_TABLE_NAME + " (" +  Contrato.Trabajador._ID + "," + Contrato.Trabajador.NOMBRES + "," + Contrato.Trabajador.TELEFONO + ") " +
+                    "VALUES (6,'Cristofer','989631679')");
+            db.execSQL("INSERT INTO " + TRABAJADOR_TABLE_NAME + " (" +  Contrato.Trabajador._ID + "," + Contrato.Trabajador.NOMBRES + "," + Contrato.Trabajador.TELEFONO + ") " +
+                    "VALUES (7,'David','986606772')");
+            db.execSQL("INSERT INTO " + TRABAJADOR_TABLE_NAME + " (" +  Contrato.Trabajador._ID + "," + Contrato.Trabajador.NOMBRES + "," + Contrato.Trabajador.TELEFONO + ") " +
+                    "VALUES (8,'Ronald','962370767')");
 
             db.execSQL("INSERT INTO " + LOGIN_TABLE_NAME + " (" +  Contrato.Login._ID + "," + Contrato.Login.ID_TRABAJADOR_REGISTRO + "," + Contrato.Login.ESTADO + ") " +
                     "VALUES (1,0,0)");
@@ -398,7 +404,7 @@ public class ProveedorDeContenido extends ContentProvider {
         Cursor c;
         c = qb.query(db, projection, selection, selectionArgs, null, null,
                         sortOrder);
-        //c.setNotificationUri(getContext().getContentResolver(), uri);
+        c.setNotificationUri(getContext().getContentResolver(), uri);
 
         return c;
     }

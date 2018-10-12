@@ -17,10 +17,10 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 /**
- * Created by Tiburcio on 28/10/2015.
+ * Created by Cristofer B. on 06/10/2018.
  */
 public class Sincronizacion {
-    private static final String LOGTAG = "Tiburcio - Sincronizacion";
+    private static final String LOGTAG = "Cristofer - Sincronizacion";
     private static ContentResolver resolvedor;
     private static Context contexto;
     private static boolean esperandoRespuestaDeServidor = false;
@@ -80,8 +80,12 @@ public class Sincronizacion {
                     CitaVolley.delCiclo(sincronizacionRegistro.getId_cita(), true, sincronizacionRegistro.getID());
                     break;
             }
+
             Log.i("sincronizacion", "acabo de enviar");
         }
+
+        //eliminar todos los registro de bitacora
+        //SincronizacionRegistroProveedor.deleteRecord(resolvedor,sincronizacionRegistro.getID());
     }
 
     private static void recibirActualizacionesDelServidor(){
@@ -94,8 +98,8 @@ public class Sincronizacion {
         try {
             ArrayList<Integer> identificadoresDeRegistrosActualizados = new ArrayList<Integer>();
             ArrayList<Cita> registrosNuevos = new ArrayList<>();
-            ArrayList<Cita> registrosViejos = CitaProveedor.readAllRecord(resolvedor);
-            ArrayList<Integer> identificadoresDeRegistrosViejos = new ArrayList<Integer>();
+            ArrayList<Cita> registrosViejos = CitaProveedor.readAllRecord(resolvedor);//1,2,3,4
+            ArrayList<Integer> identificadoresDeRegistrosViejos = new ArrayList<Integer>();//
             for(Cita i : registrosViejos) identificadoresDeRegistrosViejos.add(i.getID());
 
             JSONObject obj = null;
@@ -112,14 +116,14 @@ public class Sincronizacion {
                         obj.getInt("estado"))
                 );
             }
-
-            for(Cita cita: registrosNuevos) {
+            for(Cita cita: registrosNuevos) {//
                 try {
                     if(identificadoresDeRegistrosViejos.contains(cita.getID())) {
                         CitaProveedor.updateRecord(resolvedor, cita);
                     } else {
                         CitaProveedor.insertRecord(resolvedor, cita);
                     }
+                    Log.i("Actualizacion", "registro: "+ cita.getID());
                     identificadoresDeRegistrosActualizados.add(cita.getID());
                 } catch (Exception e){
                     Log.i("sincronizacion",
@@ -128,7 +132,7 @@ public class Sincronizacion {
                 }
             }
 
-            for(Cita cita: registrosViejos){
+/*            for(Cita cita: registrosViejos){//1,2.3,4
                 if(!identificadoresDeRegistrosActualizados.contains(cita.getID())){
                     try {
                         CitaProveedor.deleteRecord(resolvedor, cita.getID());
@@ -136,7 +140,7 @@ public class Sincronizacion {
                         Log.i("sincronizacion", "Error al borrar el registro con id:" + cita.getID());
                     }
                 }
-            }
+            }*/
 
             //CitaVolley.getAllCiclo(); //Los baja y los guarda en SQLite
         } catch (Exception e) {

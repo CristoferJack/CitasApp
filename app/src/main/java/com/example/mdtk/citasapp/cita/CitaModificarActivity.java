@@ -99,7 +99,7 @@ public class CitaModificarActivity extends AppCompatActivity {
             editTextCitaFecha.setText( simpleDate.format(ff));
             editTextCitaHora.setText(simpleTime.format(simpleDateTime.parse(cita.getFechaHora())));
 
-            fecha= simpleDateBase.format(simpleDateTime.parse(cita.getFechaHora()));
+            //fecha= simpleDateBase.format(simpleDateTime.parse(cita.getFechaHora()));
         } catch (ParseException e) {
             e.printStackTrace();
         }
@@ -119,13 +119,17 @@ public class CitaModificarActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
             case G.GUARDAR:
-                attemptGuardar();
+                try {
+                    attemptGuardar();
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
                 break;
         }
         return super.onOptionsItemSelected(item);
     }
 
-    void attemptGuardar(){
+    void attemptGuardar() throws ParseException {
         EditText editTextServicio = (EditText) findViewById(R.id.editTextCitaServicio);
         EditText editTextCliente = (EditText) findViewById(R.id.editTextCitaCliente);
         EditText editTextHora = (EditText) findViewById(R.id.editTextCitaHora);
@@ -139,6 +143,10 @@ public class CitaModificarActivity extends AppCompatActivity {
         String cliente = String.valueOf(editTextCliente.getText());
         String horaStr = String.valueOf(editTextHora.getText());
         String nota = String.valueOf(editTextNota.getText());
+
+        String fec = String.valueOf(editTextCitaFecha.getText());
+        Date ff = simpleDate.parse(fec);
+        String fechaStr = simpleDateBase.format(ff);
 
         if(TextUtils.isEmpty(servicio)){
             editTextServicio.setError(getString(R.string.campo_requerido));
@@ -157,13 +165,20 @@ public class CitaModificarActivity extends AppCompatActivity {
             editTextHora.requestFocus();
             return;
         }
+
+        if(TextUtils.isEmpty(fechaStr)){
+            editTextCitaFecha.setError(getString(R.string.campo_requerido));
+            editTextCitaFecha.requestFocus();
+            return;
+        }
+
         if(id_trabajador ==0){
             editTextHora.setError(getString(R.string.campo_requerido));
             editTextHora.requestFocus();
             return;
         }
 
-        String fechaHora = fecha+ " " +horaStr;
+        String fechaHora = fechaStr+ " " +horaStr;
 
         Cita cita = new Cita(citaId, servicio ,cliente,nota,fechaHora, id_trabajador,id_trabajador_registro,G.ESTADO_REGISTRADA);
         CitaProveedor.updateRecordSincronizacion(getContentResolver(), cita);

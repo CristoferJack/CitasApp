@@ -25,6 +25,11 @@ public class SincronizacionRegistroProveedor {
         resolver.delete(uri, null,null);
     }
 
+    public static void deleteAllRecord(ContentResolver resolver){
+        Uri uri = Uri.parse(Contrato.Sincronizacion.CONTENT_URI +"");
+        resolver.delete(uri, null,null);
+    }
+
     public static void updateRecord(ContentResolver resolver, SincronizacionRegistro SincronizacionRegistro){
         Uri uri = Uri.parse(Contrato.Sincronizacion.CONTENT_URI +"/"+ SincronizacionRegistro.getID());
         ContentValues values = new ContentValues();
