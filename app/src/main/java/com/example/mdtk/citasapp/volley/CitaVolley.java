@@ -163,7 +163,7 @@ public class CitaVolley {
         AppController.getInstance().addToRequestQueue(putRequest, tag_json_obj);
     }
 
-    public static void delCiclo(int id, final boolean conBitacora, final int idBitacora){
+    public static void delCiclo(String id, final boolean conBitacora, final int idBitacora){
         String tag_json_obj = "updateCiclo"; //En realidad debería ser un identificar único para luego poder cancelar la petición.
         String url = ruta + "/Eliminar/" + String.valueOf(id);
 

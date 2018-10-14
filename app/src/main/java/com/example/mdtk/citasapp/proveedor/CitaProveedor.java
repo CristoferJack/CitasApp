@@ -21,8 +21,10 @@ public class CitaProveedor {
     public static Uri insertRecord(ContentResolver resolver, Cita cita){
         Uri uri = Contrato.Cita.CONTENT_URI;
         ContentValues values = new ContentValues();
-        if(cita.getID()!= G.SIN_VALOR_INT){
+        if(!cita.getID().equals(G.SIN_VALOR_STRING)){
             values.put(Contrato.Cita._ID, cita.getID());
+        }else{
+            values.put(Contrato.Cita._ID, getUUID());
         }
         values.put(Contrato.Cita.SERVICIO, cita.getServicio());
         values.put(Contrato.Cita.CLIENTE, cita.getCliente());
@@ -36,7 +38,7 @@ public class CitaProveedor {
 
     public static void insertRecordSincronizacion(ContentResolver resolver, Cita cita){
         Uri uri = insertRecord(resolver,cita);
-        cita.setID(Integer.parseInt(uri.getLastPathSegment()));
+        cita.setID(uri.getLastPathSegment());
 
         SincronizacionRegistro sincronizacionRegistro = new SincronizacionRegistro();
         sincronizacionRegistro.setId_cita(cita.getID());
@@ -47,10 +49,10 @@ public class CitaProveedor {
     }
 
     public static String getUUID() {
-        return UUID.randomUUID().toString();
+        return UUID.randomUUID().toString().replace("-","");
     }
 
-    public static void deleteRecord(ContentResolver resolver, int citaId,int id_trabajador_registro){
+    public static void deleteRecord(ContentResolver resolver, String citaId,int id_trabajador_registro){
         //Uri uri = Uri.parse(Contrato.Cita.CONTENT_URI +"/"+ citaId);
         //resolver.delete(uri, null,null);
         Cita cita = readRecord(resolver,citaId);
@@ -59,7 +61,7 @@ public class CitaProveedor {
         updateRecord(resolver,cita);
     }
 
-    public static void deleteRecordSincronizacion(ContentResolver resolver, int citaId,int id_trabajador_registro){
+    public static void deleteRecordSincronizacion(ContentResolver resolver, String citaId,int id_trabajador_registro){
         deleteRecord(resolver,citaId,id_trabajador_registro);
 
         SincronizacionRegistro sincronizacionRegistro = new SincronizacionRegistro();
@@ -92,12 +94,15 @@ public class CitaProveedor {
         SincronizacionRegistroProveedor.insertRecord(resolver, sincronizacionRegistro);
     }
 
-    static public Cita readRecord(ContentResolver resolver, int cicloId){
-        Uri uri = Uri.parse(Contrato.Cita.CONTENT_URI+"/"+cicloId);
+    static public Cita readRecord(ContentResolver resolver, String cicloId){
+        Uri uri = Uri.parse(Contrato.Cita.CONTENT_URI+"");
 
-        String[] projection = {Contrato.Cita.SERVICIO, Contrato.Cita.CLIENTE, Contrato.Cita.NOTA,
+        String[] projection = {Contrato.Cita._ID , Contrato.Cita.SERVICIO, Contrato.Cita.CLIENTE, Contrato.Cita.NOTA,
                 Contrato.Cita.FECHA_HORA, Contrato.Cita.ID_TRABAJADOR, Contrato.Cita.ID_TRABAJADOR_REGISTRO, Contrato.Cita.ESTADO};
-        Cursor cursor = resolver.query(uri,projection,null,null,null);
+
+        String selection = "_id = '"+ cicloId +"'";
+
+        Cursor cursor = resolver.query(uri,projection,selection,null,null);
 
         if(cursor.moveToFirst()){
             Cita cita = new Cita();
@@ -133,7 +138,7 @@ public class CitaProveedor {
         Cita cita;
         while(cursor.moveToNext()){
             cita = new Cita();
-            cita.setID(cursor.getInt(cursor.getColumnIndex(Contrato.Cita._ID)));
+            cita.setID(cursor.getString(cursor.getColumnIndex(Contrato.Cita._ID)));
             cita.setFechaHora(cursor.getString(cursor.getColumnIndex(Contrato.Cita.FECHA_HORA)));
             cita.setServicio(cursor.getString(cursor.getColumnIndex(Contrato.Cita.SERVICIO)));
             cita.setId_trabajador(cursor.getInt(cursor.getColumnIndex(Contrato.Cita.ID_TRABAJADOR)));

@@ -246,12 +246,12 @@ public class CitaListFragment extends ListFragment
 		public boolean onActionItemClicked(ActionMode actionMode, MenuItem menuItem) {
 			switch (menuItem.getItemId()){
 				case R.id.menu_borrar:
-					int cicloId = (Integer) viewSeleccionado.getTag();
+					String cicloId = (String) viewSeleccionado.getTag();
 					CitaProveedor.deleteRecordSincronizacion(getActivity().getContentResolver(), cicloId,id_trabajador_registro);
 					break;
 				case R.id.menu_editar:
 					Intent intent = new Intent(getActivity(),CitaModificarActivity.class);
-					cicloId = (Integer) viewSeleccionado.getTag();
+					cicloId = (String) viewSeleccionado.getTag();
 					intent.putExtra(Contrato.Cita._ID, cicloId);
 					startActivity(intent);
 					break;
@@ -335,7 +335,8 @@ public class CitaListFragment extends ListFragment
 
 		@Override
 		public void bindView(View view, Context context, Cursor cursor) {
-			int ID = cursor.getInt(cursor.getColumnIndex(Contrato.Cita._ID));
+			//int ID = cursor.getInt(cursor.getColumnIndex(Contrato.Cita._ID));
+			String ID = cursor.getString(cursor.getColumnIndex(Contrato.Cita._ID));
 			String servicio = cursor.getString(cursor.getColumnIndex(Contrato.Cita.SERVICIO));
 			String cliente = cursor.getString(cursor.getColumnIndex(Contrato.Cita.CLIENTE));
 			String empleado = cursor.getString(cursor.getColumnIndex(Contrato.Cita.ID_TRABAJADOR));

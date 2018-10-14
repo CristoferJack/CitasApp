@@ -2,14 +2,14 @@ package com.example.mdtk.citasapp.pojo;
 
 public class SincronizacionRegistro {
     private int ID;
-    private int id_cita;
+    private String id_cita;
     private int operacion;
     private int id_trabajador_registro;
 
     public SincronizacionRegistro() {
     }
 
-    public SincronizacionRegistro(int ID, int id_cita, int operacion, int id_trabajador_registro) {
+    public SincronizacionRegistro(int ID, String id_cita, int operacion, int id_trabajador_registro) {
         this.ID = ID;
         this.id_cita = id_cita;
         this.operacion = operacion;
@@ -24,11 +24,11 @@ public class SincronizacionRegistro {
         this.ID = ID;
     }
 
-    public int getId_cita() {
+    public String getId_cita() {
         return id_cita;
     }
 
-    public void setId_cita(int id_cita) {
+    public void setId_cita(String id_cita) {
         this.id_cita = id_cita;
     }
 

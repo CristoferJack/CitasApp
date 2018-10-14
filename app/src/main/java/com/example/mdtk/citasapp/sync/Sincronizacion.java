@@ -96,17 +96,17 @@ public class Sincronizacion {
         Log.i("sincronizacion", "recibirActualizacionesDelServidor");
 
         try {
-            ArrayList<Integer> identificadoresDeRegistrosActualizados = new ArrayList<Integer>();
+            ArrayList<String> identificadoresDeRegistrosActualizados = new ArrayList<String>();
             ArrayList<Cita> registrosNuevos = new ArrayList<>();
             ArrayList<Cita> registrosViejos = CitaProveedor.readAllRecord(resolvedor);//1,2,3,4
-            ArrayList<Integer> identificadoresDeRegistrosViejos = new ArrayList<Integer>();//
+            ArrayList<String> identificadoresDeRegistrosViejos = new ArrayList<String>();//
             for(Cita i : registrosViejos) identificadoresDeRegistrosViejos.add(i.getID());
 
             JSONObject obj = null;
             for (int i = 0; i < jsonArray.length(); i++ ){
                 obj = jsonArray.getJSONObject(i);
                 registrosNuevos.add(new Cita(
-                        obj.getInt("id_actividad"),
+                        obj.getString("id_actividad"),
                         obj.getString("servicio"),
                         obj.getString("cliente"),
                         obj.getString("nota"),

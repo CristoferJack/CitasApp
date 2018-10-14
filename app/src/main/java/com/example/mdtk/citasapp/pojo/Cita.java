@@ -1,7 +1,7 @@
 package com.example.mdtk.citasapp.pojo;
 
 public class Cita {
-    private int ID;
+    private String ID;
     private String servicio;
     private String cliente;
     private String nota;
@@ -12,7 +12,7 @@ public class Cita {
 
     public Cita() { }
 
-    public Cita(int ID, String servicio, String cliente, String nota, String fechaHora,
+    public Cita(String ID, String servicio, String cliente, String nota, String fechaHora,
                 int id_trabajador, int id_trabajador_registro, int estado) {
         this.ID = ID;
         this.servicio = servicio;
@@ -56,11 +56,11 @@ public class Cita {
         this.fechaHora = fechaHora;
     }
 
-    public int getID() {
+    public String getID() {
         return ID;
     }
 
-    public void setID(int ID) {
+    public void setID(String ID) {
         this.ID = ID;
     }
 
