@@ -28,7 +28,7 @@ public class ProveedorDeContenido extends ContentProvider {
     private SQLiteDatabase sqlDB;
     public DatabaseHelper dbHelper;
     private static final String DATABASE_NAME = "Programate.db";
-    private static final int DATABASE_VERSION = 37;
+    private static final int DATABASE_VERSION = 40;
 
     private static final String CITA_TABLE_NAME = "Cita";
     private static final String TRABAJADOR_TABLE_NAME = "Trabajador";
@@ -160,7 +160,7 @@ public class ProveedorDeContenido extends ContentProvider {
 
             db.execSQL("Create table "
                             + CITA_TABLE_NAME
-                            + "( _id INTEGER PRIMARY KEY ON CONFLICT ROLLBACK AUTOINCREMENT, "
+                            + "( _id TEXT PRIMARY KEY , "
                             + Contrato.Cita.SERVICIO + " TEXT , "
                             + Contrato.Cita.CLIENTE + " TEXT , "
                             + Contrato.Cita.NOTA + " TEXT , "
@@ -351,16 +351,17 @@ public class ProveedorDeContenido extends ContentProvider {
 
         String query = null;
 
+
         switch (sUriMatcher.match(uri)) {
             case CITA_ONE_REG:
                 if (null == selection) selection = "";
-                selection += Contrato.Cita._ID + " = "
-                        + uri.getLastPathSegment();
+                selection += Contrato.Cita._ID + " = '"
+                        + uri.getLastPathSegment()+"' ";
                 qb.setTables(CITA_TABLE_NAME);
                 break;
             case CITA_ALL_REGS:
                 if (TextUtils.isEmpty(sortOrder)) sortOrder =
-                        Contrato.Cita._ID + " ASC";
+                        Contrato.Cita._ID ;
                 qb.setTables(CITA_TABLE_NAME);
                 break;
 
@@ -419,8 +420,8 @@ public class ProveedorDeContenido extends ContentProvider {
         switch (sUriMatcher.match(uri)) {
             case CITA_ONE_REG:
                 if (null == selection) selection = "";
-                selection += Contrato.Cita._ID + " = "
-                        + uri.getLastPathSegment();
+                selection += Contrato.Cita._ID + " = '"
+                        + uri.getLastPathSegment()+"'";
                 table = CITA_TABLE_NAME;
                 break;
             case CITA_ALL_REGS:

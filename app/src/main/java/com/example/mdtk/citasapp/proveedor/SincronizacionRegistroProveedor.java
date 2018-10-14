@@ -50,7 +50,7 @@ public class SincronizacionRegistroProveedor {
         if(cursor.moveToFirst()){
             SincronizacionRegistro SincronizacionRegistro = new SincronizacionRegistro();
             SincronizacionRegistro.setID(id_sincronizacion);
-            SincronizacionRegistro.setId_cita(cursor.getInt(cursor.getColumnIndex(Contrato.Sincronizacion.ID_CITA)));
+            SincronizacionRegistro.setId_cita(cursor.getString(cursor.getColumnIndex(Contrato.Sincronizacion.ID_CITA)));
             SincronizacionRegistro.setOperacion(cursor.getInt(cursor.getColumnIndex(Contrato.Sincronizacion.OPERACION)));
             SincronizacionRegistro.setId_trabajador_registro(cursor.getInt(cursor.getColumnIndex(Contrato.Sincronizacion.ID_TRABAJADOR_REGISTRO)));
 
@@ -73,7 +73,7 @@ public class SincronizacionRegistroProveedor {
         while(cursor.moveToNext()){
             sincronizacionRegistro = new SincronizacionRegistro();
             sincronizacionRegistro.setID(cursor.getInt(cursor.getColumnIndex(Contrato.Sincronizacion._ID)));
-            sincronizacionRegistro.setId_cita(cursor.getInt(cursor.getColumnIndex(Contrato.Sincronizacion.ID_CITA)));
+            sincronizacionRegistro.setId_cita(cursor.getString(cursor.getColumnIndex(Contrato.Sincronizacion.ID_CITA)));
             sincronizacionRegistro.setOperacion(cursor.getInt(cursor.getColumnIndex(Contrato.Sincronizacion.OPERACION)));
             sincronizacionRegistro.setId_trabajador_registro(cursor.getInt(cursor.getColumnIndex(Contrato.Sincronizacion.ID_TRABAJADOR_REGISTRO)));
 

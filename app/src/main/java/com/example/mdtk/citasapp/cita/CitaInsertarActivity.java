@@ -156,7 +156,7 @@ public class CitaInsertarActivity extends AppCompatActivity{
 
         String fechaHora = fecha+ " " +horaStr;
 
-        Cita cita = new Cita(G.SIN_VALOR_INT, servicio,cliente,nota, fechaHora, id_trabajador,id_trabajador_registro,G.ESTADO_REGISTRADA);
+        Cita cita = new Cita(G.SIN_VALOR_STRING, servicio,cliente,nota, fechaHora, id_trabajador,id_trabajador_registro,G.ESTADO_REGISTRADA);
 
         CitaProveedor.insertRecordSincronizacion(getContentResolver(), cita);
 

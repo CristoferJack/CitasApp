@@ -32,7 +32,7 @@ import static com.example.mdtk.citasapp.proveedor.TrabajadorProveedor.getList;
 import static com.example.mdtk.citasapp.proveedor.LoginProveedor.getDefault;
 
 public class CitaModificarActivity extends AppCompatActivity {
-    int citaId;
+    String citaId;
     String fecha;
     EditText editTextCitaServicio;
     EditText editTextCitaCliente;
@@ -77,7 +77,7 @@ public class CitaModificarActivity extends AppCompatActivity {
             }
         });
 
-        citaId = this.getIntent().getExtras().getInt(Contrato.Cita._ID);
+        citaId = this.getIntent().getExtras().getString(Contrato.Cita._ID);
         Cita cita = CitaProveedor.readRecord(getContentResolver(), citaId);
 
         int posicionEmpleado = 0;
