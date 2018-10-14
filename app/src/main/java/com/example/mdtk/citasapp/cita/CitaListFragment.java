@@ -219,12 +219,17 @@ public class CitaListFragment extends ListFragment
 			}
 		});
 
-		/*getListView().setOnItemClickListener(new AdapterView.OnItemClickListener() {
+		getListView().setOnItemClickListener(new AdapterView.OnItemClickListener() {
 			@Override
 			public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-				actionMode.finish();
+				view.setSelected(true);
+				viewSeleccionado = view;
+                Intent intent = new Intent(getActivity(),CitaModificarActivity.class);
+				int cicloId = (Integer) viewSeleccionado.getTag();
+                intent.putExtra(Contrato.Cita._ID, cicloId);
+                startActivity(intent);
 			}
-		});*/
+		});
 
 	}
 

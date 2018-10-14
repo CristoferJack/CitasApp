@@ -11,6 +11,7 @@
         android:id="@+id/menu_editar"
         android:title="Editar"
         android:icon="@drawable/ic_action_editar"
-        app:showAsAction="always"/>
+        app:showAsAction="never"
+        android:visible="false"/>
 
 </menu>
