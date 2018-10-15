@@ -49,7 +49,7 @@ public class CitaProveedor {
     }
 
     public static String getUUID() {
-        return UUID.randomUUID().toString().replace("-","");
+        return UUID.randomUUID().toString();
     }
 
     public static void deleteRecord(ContentResolver resolver, String citaId,int id_trabajador_registro){
@@ -72,7 +72,7 @@ public class CitaProveedor {
     }
 
     public static void updateRecord(ContentResolver resolver, Cita cita){
-        Uri uri = Uri.parse(Contrato.Cita.CONTENT_URI +"/"+ cita.getID());
+        Uri uri = Uri.parse(Contrato.Cita.CONTENT_URI +"");
         ContentValues values = new ContentValues();
         values.put(Contrato.Cita.SERVICIO, cita.getServicio());
         values.put(Contrato.Cita.CLIENTE, cita.getCliente());
@@ -81,7 +81,8 @@ public class CitaProveedor {
         values.put(Contrato.Cita.ID_TRABAJADOR, cita.getId_trabajador());
         values.put(Contrato.Cita.ID_TRABAJADOR_REGISTRO, cita.getId_trabajador_registro());
         values.put(Contrato.Cita.ESTADO, cita.getEstado());
-        resolver.update(uri, values,null,null);
+        String where = "_id = '" +cita.getID()+"'";
+        resolver.update(uri, values,where,null);
     }
 
     public static void updateRecordSincronizacion(ContentResolver resolver, Cita cita){

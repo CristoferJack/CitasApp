@@ -28,7 +28,7 @@ public class ProveedorDeContenido extends ContentProvider {
     private SQLiteDatabase sqlDB;
     public DatabaseHelper dbHelper;
     private static final String DATABASE_NAME = "Programate.db";
-    private static final int DATABASE_VERSION = 40;
+    private static final int DATABASE_VERSION = 46;
 
     private static final String CITA_TABLE_NAME = "Cita";
     private static final String TRABAJADOR_TABLE_NAME = "Trabajador";
@@ -259,11 +259,12 @@ public class ProveedorDeContenido extends ContentProvider {
     @Override
     public Uri insert(Uri uri, ContentValues values) {
         sqlDB = dbHelper.getWritableDatabase();
-
+        boolean esCita = false;
         String table = "";
         switch (sUriMatcher.match(uri)) {
             case CITA_ALL_REGS:
                 table = CITA_TABLE_NAME;
+                esCita = true;
                 break;
             case TRABAJADOR_ALL_REGS:
                 table = TRABAJADOR_TABLE_NAME;
@@ -282,7 +283,13 @@ public class ProveedorDeContenido extends ContentProvider {
             Uri rowUri = ContentUris.appendId(
                     uri.buildUpon(), rowId).build();
             getContext().getContentResolver().notifyChange(rowUri, null);
-            return rowUri;
+
+            if(esCita){
+                return Uri.parse(uri +"/"+values.getAsString("_id"));
+            }else{
+                return rowUri;
+            }
+
         }
         throw new SQLException("Failed to insertRecord row into " + uri);
     }
@@ -421,7 +428,7 @@ public class ProveedorDeContenido extends ContentProvider {
             case CITA_ONE_REG:
                 if (null == selection) selection = "";
                 selection += Contrato.Cita._ID + " = '"
-                        + uri.getLastPathSegment()+"'";
+                        + uri.getLastPathSegment()+"' ";
                 table = CITA_TABLE_NAME;
                 break;
             case CITA_ALL_REGS:

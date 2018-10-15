@@ -91,7 +91,6 @@ public class CitaVolley {
         }
 
         AppController.getInstance().getSincronizacion().setEsperandoRespuestaDeServidor(true);
-        Log.d("Response", "idSincronizacionRegistro "+idSincronizacionRegistro);
 
         JsonObjectRequest postRequest = new JsonObjectRequest(Request.Method.POST, url, jsonObject,
                 new Response.Listener<JSONObject>()

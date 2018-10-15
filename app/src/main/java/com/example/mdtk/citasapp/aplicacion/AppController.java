@@ -6,23 +6,27 @@ package com.example.mdtk.citasapp.aplicacion;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
+import android.app.AlarmManager;
 import android.app.Application;
+import android.app.PendingIntent;
 import android.content.ContentResolver;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SyncRequest;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.v4.app.NotificationCompat;
 import android.text.TextUtils;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.Volley;
+import com.example.mdtk.citasapp.sync.NotificacionPeriodica;
 import com.example.mdtk.citasapp.sync.Sincronizacion;
 import com.example.mdtk.citasapp.constantes.G;
 import com.example.mdtk.citasapp.proveedor.Contrato;
 import com.example.mdtk.citasapp.volley.Utils.LruBitmapCache;
-//import com.example.tiburcio.ejemploproveedorcontenido.volley.Utils.LruBitmapCache;
 
 public class AppController extends Application {
 
@@ -44,9 +48,11 @@ public class AppController extends Application {
     // Sync interval constants
     public static final int SYNC_INTERVAL = G.SYNC_INTERVAL ;//* 180;
     public static final int SYNC_FLEXTIME = SYNC_INTERVAL/3;
+    public static final int NOTIFICACION_INTERVAL = 1000*60; /* dos horas 1000*60*60*2;*/
 
     private Sincronizacion sincronizacion;
 
+    NotificationCompat.Builder notificacion;
 
     // Instance fields
     Account mAccount;
@@ -58,6 +64,17 @@ public class AppController extends Application {
         resolvedor = getContentResolver();
 
         configurePeriodicSync(SYNC_INTERVAL, SYNC_FLEXTIME);
+
+        activarNotificacionPeriodica();
+    }
+
+    private void activarNotificacionPeriodica() {
+        AlarmManager manager = (AlarmManager) this.getSystemService(Context.ALARM_SERVICE);
+
+        Intent alarmIntent = new Intent(this, NotificacionPeriodica.class);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, alarmIntent, 0);
+
+        manager.setRepeating(AlarmManager.RTC, System.currentTimeMillis(), NOTIFICACION_INTERVAL, pendingIntent);
     }
 
     public static ContentResolver getResolvedor(){
@@ -138,7 +155,7 @@ public class AppController extends Application {
        //resolvedor.setIsSyncable(mAccount, AUTHORITY, 1); //Creo que no hace falta ponerlo porque ya está en el proveedor en el manifest android:syncable="true"
         resolvedor.setSyncAutomatically(mAccount, AUTHORITY, true);
         resolvedor.setMasterSyncAutomatically(true);
-        resolvedor.addPeriodicSync(mAccount, AUTHORITY, new Bundle(), SYNC_INTERVAL);//Bundle.EMPTY
+        resolvedor.addPeriodicSync(mAccount, AUTHORITY, new Bundle(), syncInterval);//Bundle.EMPTY
 
 /*        //////
         //String authority = context.getString(R.string.content_authority);

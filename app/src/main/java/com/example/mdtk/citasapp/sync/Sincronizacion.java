@@ -62,6 +62,7 @@ public class Sincronizacion {
                 case G.OPERACION_INSERTAR:
                     Cita cita = null;
                     try {
+                        Log.e("dsdsf","id_Cita sicncronizacion "+sincronizacionRegistro.getId_cita());
                         cita = CitaProveedor.readRecord(resolvedor, sincronizacionRegistro.getId_cita());
                         CitaVolley.addCita(cita, true, sincronizacionRegistro.getID());
                     } catch (Exception e) {

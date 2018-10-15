@@ -225,7 +225,7 @@ public class CitaListFragment extends ListFragment
 				view.setSelected(true);
 				viewSeleccionado = view;
                 Intent intent = new Intent(getActivity(),CitaModificarActivity.class);
-				int cicloId = (Integer) viewSeleccionado.getTag();
+				String cicloId = (String) viewSeleccionado.getTag();
                 intent.putExtra(Contrato.Cita._ID, cicloId);
                 startActivity(intent);
 			}
