@@ -179,6 +179,7 @@ public class CitaModificarActivity extends AppCompatActivity {
         }
 
         String fechaHora = fechaStr+ " " +horaStr;
+        fechaHora = simpleDateTime.format(simpleDateTime.parse(fechaHora)) ;
 
         Cita cita = new Cita(citaId, servicio ,cliente,nota,fechaHora, id_trabajador,id_trabajador_registro,G.ESTADO_REGISTRADA);
         CitaProveedor.updateRecordSincronizacion(getContentResolver(), cita);

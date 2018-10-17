@@ -48,7 +48,7 @@ public class AppController extends Application {
     // Sync interval constants
     public static final int SYNC_INTERVAL = G.SYNC_INTERVAL ;//* 180;
     public static final int SYNC_FLEXTIME = SYNC_INTERVAL/3;
-    public static final int NOTIFICACION_INTERVAL = 1000*60; /* dos horas 1000*60*60*2;*/
+    public static final int NOTIFICACION_INTERVAL = 1000*60*2; /* dos horas 1000*60*60*2;*/
 
     private Sincronizacion sincronizacion;
 

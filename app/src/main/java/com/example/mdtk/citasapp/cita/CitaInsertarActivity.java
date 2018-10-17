@@ -37,6 +37,7 @@ public class CitaInsertarActivity extends AppCompatActivity{
     EditText editTextCitaFecha;
     SimpleDateFormat simpleDate =  new SimpleDateFormat("dd/MM/yyyy");
     SimpleDateFormat simpleDateBase =  new SimpleDateFormat("yyyy-MM-dd");
+    SimpleDateFormat simpleDateTime =  new SimpleDateFormat("yyyy-MM-dd HH:mm");
     Spinner spnEmpleado;
     int id_trabajador = 0;
     int id_trabajador_registro = 0;
@@ -155,6 +156,7 @@ public class CitaInsertarActivity extends AppCompatActivity{
         }
 
         String fechaHora = fecha+ " " +horaStr;
+        fechaHora = simpleDateTime.format(simpleDateTime.parse(fechaHora)) ;
 
         Cita cita = new Cita(G.SIN_VALOR_STRING, servicio,cliente,nota, fechaHora, id_trabajador,id_trabajador_registro,G.ESTADO_REGISTRADA);
 

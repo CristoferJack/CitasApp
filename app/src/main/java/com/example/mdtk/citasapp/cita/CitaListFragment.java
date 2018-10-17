@@ -56,9 +56,7 @@ public class CitaListFragment extends ListFragment
 	View viewSeleccionado;
 	CompactCalendarView calendarView;
 	private SimpleDateFormat dateFormatForMonth = new SimpleDateFormat("MMM - yyyy", Locale.getDefault());
-	private SimpleDateFormat simpleDateTime =  new SimpleDateFormat("yyyy-MM-dd HH:mm");
 	private SimpleDateFormat simpleDate =  new SimpleDateFormat("yyyy-MM-dd");
-	private SimpleDateFormat simpleTime = new SimpleDateFormat("HH:mm");
 	int day;
 	int month;
 	int year;
@@ -281,7 +279,7 @@ public class CitaListFragment extends ListFragment
 		String columns[] = new String[] { Contrato.Cita._ID,
 										  Contrato.Cita.SERVICIO,
 				                          Contrato.Cita.CLIENTE,
-				                          Contrato.Cita.FECHA_HORA,
+											Contrato.Cita.FECHA_HORA,
 				                          Contrato.Cita.ID_TRABAJADOR
 										};
 
@@ -297,9 +295,9 @@ public class CitaListFragment extends ListFragment
 		String dia = simpleDateBase.format(calFecha.getTime());
 		String empleadoSelection = id_trabajador_seleccionado ==0?"":" AND "+Contrato.Cita.ID_TRABAJADOR +" = '"+ id_trabajador_seleccionado +"'";
 		String selection = Contrato.Cita.FECHA_HORA+" like '"+dia+"%' AND estado ='" + G.ESTADO_REGISTRADA +"' "+ empleadoSelection;
-		String orderBy = "datetime("+Contrato.Cita.FECHA_HORA+") ASC";
+		String orderBy = "strftime('%Y-%m-%d %H:%M',"+Contrato.Cita.FECHA_HORA+") ASC";
 		return new CursorLoader(getActivity(),
-				baseUri, null, selection, null, orderBy);
+				baseUri, columns, selection, null, orderBy);
 	}
 
 	public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
@@ -332,56 +330,4 @@ public class CitaListFragment extends ListFragment
 		day= i2;
 		getLoaderManager().restartLoader(0,null,this);
 	}*/
-
-	public class CitaCursorAdapter extends CursorAdapter {
-		public CitaCursorAdapter(Context context) {
-			super(context, null, false);
-		}
-
-		@Override
-		public void bindView(View view, Context context, Cursor cursor) {
-			//int ID = cursor.getInt(cursor.getColumnIndex(Contrato.Cita._ID));
-			String ID = cursor.getString(cursor.getColumnIndex(Contrato.Cita._ID));
-			String servicio = cursor.getString(cursor.getColumnIndex(Contrato.Cita.SERVICIO));
-			String cliente = cursor.getString(cursor.getColumnIndex(Contrato.Cita.CLIENTE));
-			String empleado = cursor.getString(cursor.getColumnIndex(Contrato.Cita.ID_TRABAJADOR));
-
-			TextView textviewServicio = (TextView) view.findViewById(R.id.textview_ciclo_list_item_servicio);
-			textviewServicio.setText(servicio);
-
-			TextView textviewCliente = (TextView) view.findViewById(R.id.textview_ciclo_list_item_cliente);
-            textviewCliente.setText(cliente);
-
-			ColorGenerator generator = ColorGenerator.MATERIAL; // or use DEFAULT
-			int color = generator.getColor(empleado); //Genera un color según el nombre
-			String hora ="";
-			try {
-				String d = cursor.getString(cursor.getColumnIndex(Contrato.Cita.FECHA_HORA));
-				Date dat = simpleDateTime.parse(d);
-				hora = simpleTime.format(dat);
-			} catch (ParseException e) {
-				e.printStackTrace();
-			}
-
-			TextDrawable drawable = TextDrawable.builder()
-					.beginConfig()
-					.fontSize(60) // size of text in pixels
-					.endConfig()
-					.buildRoundRect(hora.substring(0,5), color,20);
-
-			ImageView image = (ImageView) view.findViewById(R.id.image_view);
-			image.setImageDrawable(drawable);
-
-			view.setTag(ID);
-
-		}
-
-		@Override
-		public View newView(Context context, Cursor cursor, ViewGroup parent) {
-			LayoutInflater inflater = LayoutInflater.from(context);
-			View v = inflater.inflate(R.layout.cita_list_item, parent, false);
-			bindView(v, context, cursor);
-			return v;
-		}
-	}
 }

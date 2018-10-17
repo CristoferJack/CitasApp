@@ -187,4 +187,18 @@ public class CitaProveedor {
 
         return disponibilidadMap;
     }
+
+    static public int cantidadCitasPendientesDia(ContentResolver contentResolver,int id_trabajador_registrado){
+        Uri uri = Contrato.Cita.CONTENT_URI;
+        String[] projection = {Contrato.Cita.SERVICIO, Contrato.Cita.CLIENTE, Contrato.Cita.NOTA,
+                Contrato.Cita.FECHA_HORA, Contrato.Cita.ID_TRABAJADOR, Contrato.Cita.ESTADO};
+
+        String empleadoSelection = " AND "+Contrato.Cita.ID_TRABAJADOR +" = '"+ id_trabajador_registrado +"'";
+        String selection = Contrato.Cita.FECHA_HORA+" > strftime('%Y-%m-%d %H:%M', datetime('now','localtime')) AND "+ Contrato.Cita.FECHA_HORA+" < strftime('%Y-%m-%d 23:59', datetime('now','localtime')) AND " +
+                "estado ='" + G.ESTADO_REGISTRADA +"' "+ empleadoSelection;
+
+        Cursor cursor = contentResolver.query(uri,projection,selection,null,null);
+
+        return cursor.getCount();
+    }
 }

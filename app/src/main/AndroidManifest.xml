@@ -2,13 +2,14 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.mdtk.citasapp">
 
-    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.AUTHENTICATE_ACCOUNTS" />
     <uses-permission android:name="android.permission.READ_SYNC_SETTINGS" />
     <uses-permission android:name="android.permission.WRITE_SYNC_SETTINGS" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.WRITE_SYNC_SETTINGS" />
     <uses-permission android:name="android.permission.SET_ALARM" />
+
     <application
         android:name=".aplicacion.AppController"
         android:allowBackup="true"
@@ -17,7 +18,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity"
+        <activity
+            android:name=".MainActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -27,7 +29,6 @@
         </activity>
         <activity
             android:name=".cita.CitaActivity"
-            android:parentActivityName=".MainActivity"
             android:theme="@style/AppTheme.NoActionBar">
 
             <!-- Parent activity meta-data to support 4.0 and lower -->
@@ -42,7 +43,8 @@
             android:enabled="true"
             android:exported="true" />
 
-        <activity android:name=".cita.CitaInsertarActivity"
+        <activity
+            android:name=".cita.CitaInsertarActivity"
             android:parentActivityName=".cita.CitaActivity"
             android:theme="@style/AppTheme.NoActionBar">
 
@@ -51,8 +53,8 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".cita.CitaActivity" />
         </activity>
-
-        <activity android:name=".cita.CitaModificarActivity"
+        <activity
+            android:name=".cita.CitaModificarActivity"
             android:parentActivityName=".cita.CitaActivity"
             android:theme="@style/AppTheme.NoActionBar">
 
@@ -61,11 +63,21 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".cita.CitaActivity" />
         </activity>
+        <activity
+            android:name=".cita.CitaPendienteActivity"
+            android:noHistory="true"
+            android:parentActivityName=".cita.CitaActivity"
+            android:theme="@style/AppTheme.NoActionBar">
 
+            <!-- Parent activity meta-data to support 4.0 and lower -->
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".cita.CitaActivity" />
+        </activity>
 
         <service
             android:name=".authenticator.AuthenticatorService"
-            android:exported="false" >
+            android:exported="false">
             <intent-filter>
                 <action android:name="android.accounts.AccountAuthenticator" />
             </intent-filter>
@@ -77,7 +89,7 @@
         <service
             android:name=".sync.SyncService"
             android:exported="false"
-            android:process=":sync" >
+            android:process=":sync">
             <intent-filter>
                 <action android:name="android.content.SyncAdapter" />
             </intent-filter>
@@ -87,7 +99,7 @@
                 android:resource="@xml/syncadapter" />
         </service>
 
-        <receiver android:name=".sync.NotificacionPeriodica"/>
+        <receiver android:name=".sync.NotificacionPeriodica" />
 
     </application>
 

@@ -16,4 +16,7 @@
     <string name="citas_cabecera">Citas programadas:</string>
 
     <string name="progress_cargando_datos">Cargando datos&#8230;</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

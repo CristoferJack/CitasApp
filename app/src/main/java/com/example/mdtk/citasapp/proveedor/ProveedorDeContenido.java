@@ -28,7 +28,7 @@ public class ProveedorDeContenido extends ContentProvider {
     private SQLiteDatabase sqlDB;
     public DatabaseHelper dbHelper;
     private static final String DATABASE_NAME = "Programate.db";
-    private static final int DATABASE_VERSION = 46;
+    private static final int DATABASE_VERSION = 47;
 
     private static final String CITA_TABLE_NAME = "Cita";
     private static final String TRABAJADOR_TABLE_NAME = "Trabajador";
