@@ -26,6 +26,7 @@ import com.example.mdtk.citasapp.sync.NotificacionPeriodica;
 import com.example.mdtk.citasapp.sync.Sincronizacion;
 import com.example.mdtk.citasapp.constantes.G;
 import com.example.mdtk.citasapp.proveedor.Contrato;
+import com.example.mdtk.citasapp.sync.SincronizacionTrabajador;
 import com.example.mdtk.citasapp.volley.Utils.LruBitmapCache;
 
 public class AppController extends Application {
@@ -51,6 +52,7 @@ public class AppController extends Application {
     public static final int NOTIFICACION_INTERVAL = 1000*60*2; /* dos horas 1000*60*60*2;*/
 
     private Sincronizacion sincronizacion;
+    private SincronizacionTrabajador sincronizacionTrabajador;
 
     NotificationCompat.Builder notificacion;
 
@@ -156,24 +158,6 @@ public class AppController extends Application {
         resolvedor.setSyncAutomatically(mAccount, AUTHORITY, true);
         resolvedor.setMasterSyncAutomatically(true);
         resolvedor.addPeriodicSync(mAccount, AUTHORITY, new Bundle(), syncInterval);//Bundle.EMPTY
-
-/*        //////
-        //String authority = context.getString(R.string.content_authority);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            // we can enable inexact timers in our periodic sync
-            *//*SyncRequest request = new SyncRequest.Builder().
-                    syncPeriodic(syncInterval, flexTime).
-                    setSyncAdapter(mAccount, AUTHORITY).
-                    setExtras(new Bundle()).build();
-            resolvedor.requestSync(request);*//*
-            resolvedor.addPeriodicSync(mAccount,
-                    AUTHORITY, new Bundle(), flexTime);
-        } else {
-            resolvedor.addPeriodicSync(mAccount,
-                    AUTHORITY, new Bundle(), flexTime);
-        }
-        resolvedor.setSyncAutomatically(mAccount, AUTHORITY, true);
-        resolvedor.setMasterSyncAutomatically(true);*/
     }
 
 
@@ -183,6 +167,14 @@ public class AppController extends Application {
 
     public void setSincronizacion(Sincronizacion sincronizacion) {
         this.sincronizacion = sincronizacion;
+    }
+
+    public SincronizacionTrabajador getSincronizacionTrabajador() {
+        return sincronizacionTrabajador;
+    }
+
+    public void setSincronizacionTrabajador(SincronizacionTrabajador sincronizacionTrabajador) {
+        this.sincronizacionTrabajador = sincronizacionTrabajador;
     }
 
 }

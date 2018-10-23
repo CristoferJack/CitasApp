@@ -1,6 +1,6 @@
 package com.example.mdtk.citasapp.cita;
 
-import android.content.Context;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Color;
@@ -10,7 +10,6 @@ import android.support.v4.app.ListFragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
-import android.support.v4.widget.CursorAdapter;
 import android.view.ActionMode;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -20,18 +19,18 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import com.amulyakhare.textdrawable.TextDrawable;
-import com.amulyakhare.textdrawable.util.ColorGenerator;
 import com.example.mdtk.citasapp.R;
+import com.example.mdtk.citasapp.aplicacion.AppController;
 import com.example.mdtk.citasapp.constantes.G;
 import com.example.mdtk.citasapp.pojo.Cita;
 import com.example.mdtk.citasapp.pojo.Trabajador;
 import com.example.mdtk.citasapp.proveedor.CitaProveedor;
 import com.example.mdtk.citasapp.proveedor.Contrato;
+import com.example.mdtk.citasapp.sync.Sincronizacion;
+import com.example.mdtk.citasapp.sync.SincronizacionTrabajador;
 import com.github.sundeepk.compactcalendarview.CompactCalendarView;
 import com.github.sundeepk.compactcalendarview.domain.Event;
 
@@ -44,7 +43,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-import static com.example.mdtk.citasapp.proveedor.TrabajadorProveedor.getList;
+import static com.example.mdtk.citasapp.proveedor.TrabajadorProveedor.readAllRecord;
 import static com.example.mdtk.citasapp.proveedor.LoginProveedor.getDefault;
 
 public class CitaListFragment extends ListFragment
@@ -82,6 +81,11 @@ public class CitaListFragment extends ListFragment
 		MenuItem menuItem = menu.add(Menu.NONE, G.INSERTAR, Menu.NONE, "Insertar");
 		menuItem.setIcon(R.drawable.ic_action_registro);
 		menuItem.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
+
+		MenuItem menuItem2 = menu.add(Menu.NONE, G.SINCRONIZAR, Menu.NONE, "Sincronizar");
+		menuItem2.setIcon(R.drawable.ic_action_sincronizar);
+		menuItem2.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
+
 		super.onCreateOptionsMenu(menu, inflater);
 	}
 
@@ -97,6 +101,27 @@ public class CitaListFragment extends ListFragment
 				Intent intent = new Intent(getActivity(), CitaInsertarActivity.class);
 				intent.putExtras(date);
 				startActivity(intent);
+				break;
+			case(G.SINCRONIZAR):
+				final ProgressDialog progresRing = ProgressDialog.show(getActivity(), null, "Sincronizando...", true);
+				progresRing.setCancelable(false);
+
+				AppController.getInstance().setSincronizacionTrabajador(new SincronizacionTrabajador(getActivity()));
+				AppController.getInstance().getSincronizacionTrabajador().sincronizar();
+
+				AppController.getInstance().setSincronizacion(new Sincronizacion(getActivity()));
+				AppController.getInstance().getSincronizacion().sincronizar();
+
+				new Thread(new Runnable() {
+					@Override
+					public void run() {
+						try {
+							Thread.sleep(3000);
+						} catch (Exception e) {
+						}
+						progresRing.dismiss();
+					}
+				}).start();
 				break;
 		}
 
@@ -129,7 +154,7 @@ public class CitaListFragment extends ListFragment
 		spnEmpleado = (Spinner)v.findViewById(R.id.spnEmpleado);
 		ArrayList<Trabajador> trabajadorList = new ArrayList<>();
 		trabajadorList.add(new Trabajador(0,"Todos",""));
-		trabajadorList.addAll(getList(getActivity().getContentResolver()));
+		trabajadorList.addAll(readAllRecord(getActivity().getContentResolver()));
 		ArrayAdapter<Trabajador> adapter = new ArrayAdapter<Trabajador>(v.getContext(), android.R.layout.simple_spinner_dropdown_item, trabajadorList);
 		spnEmpleado.setAdapter(adapter);
 		spnEmpleado.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {

@@ -28,7 +28,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
-import static com.example.mdtk.citasapp.proveedor.TrabajadorProveedor.getList;
+import static com.example.mdtk.citasapp.proveedor.TrabajadorProveedor.readAllRecord;
 import static com.example.mdtk.citasapp.proveedor.LoginProveedor.getDefault;
 
 public class CitaModificarActivity extends AppCompatActivity {
@@ -62,7 +62,7 @@ public class CitaModificarActivity extends AppCompatActivity {
         editTextCitaFecha =(EditText) findViewById(R.id.editTextCitaFecha);
         editTextCitaHora =(EditText) findViewById(R.id.editTextCitaHora);
         spnEmpleado = (Spinner)findViewById(R.id.spnEmpleadoD);
-        List<Trabajador> trabajadorList = getList(getContentResolver());
+        List<Trabajador> trabajadorList = readAllRecord(getContentResolver());
         ArrayAdapter<Trabajador> adapter = new ArrayAdapter<Trabajador>(this, android.R.layout.simple_spinner_dropdown_item, trabajadorList);
         spnEmpleado.setAdapter(adapter);
         spnEmpleado.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {

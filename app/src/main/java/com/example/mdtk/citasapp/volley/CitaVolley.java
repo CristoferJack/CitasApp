@@ -1,35 +1,22 @@
 package com.example.mdtk.citasapp.volley;
 
-import android.content.ContentResolver;
-import android.content.Context;
-import android.net.Uri;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.android.volley.Request;
-import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
 import com.example.mdtk.citasapp.constantes.G;
 import com.example.mdtk.citasapp.aplicacion.AppController;
-import com.example.mdtk.citasapp.constantes.G;
 import com.example.mdtk.citasapp.pojo.Cita;
 import com.example.mdtk.citasapp.proveedor.SincronizacionRegistroProveedor;
-import com.example.mdtk.citasapp.proveedor.CitaProveedor;
 import com.example.mdtk.citasapp.sync.Sincronizacion;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
 import static com.example.mdtk.citasapp.proveedor.LoginProveedor.getDefault;
 
@@ -55,7 +42,7 @@ public class CitaVolley {
                     public void onResponse(JSONArray response) {
                         // display response
                         //Log.d("Response", response.toString());
-                        Sincronizacion.realizarActualizacionesDelServidorUnaVezRecibidas(response);
+                        Sincronizacion.realizarActualizacionesDelServidorUnaVezRecibidasCita(response);
                         AppController.getInstance().getSincronizacion().setEsperandoRespuestaDeServidor(false);
                     }
                 },

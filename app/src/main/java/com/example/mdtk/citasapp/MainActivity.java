@@ -2,6 +2,7 @@ package com.example.mdtk.citasapp;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -9,9 +10,12 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.mdtk.citasapp.aplicacion.AppController;
 import com.example.mdtk.citasapp.cita.CitaActivity;
 import com.example.mdtk.citasapp.pojo.Trabajador;
 import com.example.mdtk.citasapp.pojo.Login;
+import com.example.mdtk.citasapp.sync.SincronizacionTrabajador;
+import com.example.mdtk.citasapp.volley.TrabajadorVolley;
 
 import static com.example.mdtk.citasapp.proveedor.TrabajadorProveedor.validarLogin;
 import static com.example.mdtk.citasapp.proveedor.LoginProveedor.getDefault;
@@ -57,32 +61,37 @@ public class MainActivity extends AppCompatActivity {
         progressDialog.setMessage("Autenticando...");
         progressDialog.show();
 
-        String telefono = txtLoginTelefono.getText().toString();
-        //String password = _passwordText.getText().toString();
+        AppController.getInstance().setSincronizacionTrabajador(new SincronizacionTrabajador(this));
+        AppController.getInstance().getSincronizacionTrabajador().sincronizar();
 
-        Trabajador trabajador = validarLogin(getContentResolver(), telefono);
-        if(trabajador !=null){
-            Login login =  new Login(1, trabajador.getID(),1);
-            updateRecord(getContentResolver(),login );
+        final Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                String telefono = txtLoginTelefono.getText().toString();
+                //String password = _passwordText.getText().toString();
 
-            Intent intent = new Intent(MainActivity.this, CitaActivity.class);
-            startActivity(intent);
-        }else{
-            Toast.makeText(getBaseContext(), "Telefono inválido", Toast.LENGTH_LONG).show();
-            onLoginFailed();
-            progressDialog.dismiss();
-            return;
-        }
+                Trabajador trabajador = validarLogin(getContentResolver(), telefono);
+                if(trabajador !=null){
+                    Login login =  new Login(1, trabajador.getID(),1);
+                    updateRecord(getContentResolver(),login );
 
-        new android.os.Handler().postDelayed(
-                new Runnable() {
-                    public void run() {
-                        // On complete call either onLoginSuccess or onLoginFailed
-                        onLoginSuccess();
-                        // onLoginFailed();
-                        progressDialog.dismiss();
-                    }
-                }, 3000);
+                    Intent intent = new Intent(MainActivity.this, CitaActivity.class);
+                    startActivity(intent);
+                }else{
+                    Toast.makeText(getBaseContext(), "Telefono inválido", Toast.LENGTH_LONG).show();
+                    onLoginFailed();
+                    progressDialog.dismiss();
+                    return;
+                }
+
+                // On complete call either onLoginSuccess or onLoginFailed
+                onLoginSuccess();
+                // onLoginFailed();
+                progressDialog.dismiss();
+
+            }
+        }, 3000);
     }
 
     @Override

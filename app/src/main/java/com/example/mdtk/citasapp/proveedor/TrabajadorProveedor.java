@@ -1,18 +1,22 @@
 package com.example.mdtk.citasapp.proveedor;
 
 import android.content.ContentResolver;
+import android.content.ContentValues;
 import android.database.Cursor;
 import android.net.Uri;
+
+import com.example.mdtk.citasapp.constantes.G;
+import com.example.mdtk.citasapp.pojo.Trabajador;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class TrabajadorProveedor {
-    static public List<com.example.mdtk.citasapp.pojo.Trabajador> getList (ContentResolver contentResolver){
+    static public ArrayList<Trabajador> readAllRecord(ContentResolver contentResolver){
         Uri uri = Contrato.Trabajador.CONTENT_URI;
         String[] projection = {Contrato.Trabajador._ID, Contrato.Trabajador.NOMBRES, Contrato.Trabajador.TELEFONO};
         Cursor cursor = contentResolver.query(uri,projection,null,null,null);
-        List<com.example.mdtk.citasapp.pojo.Trabajador> trabajadors = new ArrayList<>();
+        ArrayList<com.example.mdtk.citasapp.pojo.Trabajador> trabajadors = new ArrayList<>();
 
         while (cursor.moveToNext()) {
             com.example.mdtk.citasapp.pojo.Trabajador trabajador = new com.example.mdtk.citasapp.pojo.Trabajador();
@@ -37,5 +41,22 @@ public class TrabajadorProveedor {
             return trabajador;
         }
         return null;
+    }
+
+    public static Uri insertRecord(ContentResolver resolver, Trabajador trabajador){
+        Uri uri = Contrato.Trabajador.CONTENT_URI;
+        ContentValues values = new ContentValues();
+        values.put(Contrato.Trabajador._ID, trabajador.getID());
+        values.put(Contrato.Trabajador.NOMBRES, trabajador.getNombres());
+        values.put(Contrato.Trabajador.TELEFONO, trabajador.getTelefono());
+        return resolver.insert(uri, values);
+    }
+
+    public static void updateRecord(ContentResolver resolver, Trabajador trabajador){
+        Uri uri = Uri.parse(Contrato.Trabajador.CONTENT_URI +"/"+trabajador.getID());
+        ContentValues values = new ContentValues();
+        values.put(Contrato.Trabajador.NOMBRES, trabajador.getNombres());
+        values.put(Contrato.Trabajador.TELEFONO, trabajador.getTelefono());
+        resolver.update(uri, values,null,null);
     }
 }

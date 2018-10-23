@@ -28,7 +28,7 @@ public class ProveedorDeContenido extends ContentProvider {
     private SQLiteDatabase sqlDB;
     public DatabaseHelper dbHelper;
     private static final String DATABASE_NAME = "Programate.db";
-    private static final int DATABASE_VERSION = 47;
+    private static final int DATABASE_VERSION = 59;
 
     private static final String CITA_TABLE_NAME = "Cita";
     private static final String TRABAJADOR_TABLE_NAME = "Trabajador";
@@ -203,7 +203,7 @@ public class ProveedorDeContenido extends ContentProvider {
             db.execSQL("INSERT INTO " + CITA_TABLE_NAME + " (" +  Contrato.Cita._ID + "," + Contrato.Cita.SERVICIO + "," + Contrato.Cita.CLIENTE + "," + Contrato.Cita.NOTA + "," + Contrato.Cita.FECHA_HORA + "," + Contrato.Cita.ID_TRABAJADOR + ") " +
                     "VALUES (2,'Cambio de aceite','Johnnie Walker','Cambio de aceite del carro azul Ford Mustang','2018-09-02 11:11',2)");*/
 
-            db.execSQL("INSERT INTO " + TRABAJADOR_TABLE_NAME + " (" +  Contrato.Trabajador._ID + "," + Contrato.Trabajador.NOMBRES + "," + Contrato.Trabajador.TELEFONO + ") " +
+            /*db.execSQL("INSERT INTO " + TRABAJADOR_TABLE_NAME + " (" +  Contrato.Trabajador._ID + "," + Contrato.Trabajador.NOMBRES + "," + Contrato.Trabajador.TELEFONO + ") " +
                     "VALUES (1,'Naaminn','997271506')");
             db.execSQL("INSERT INTO " + TRABAJADOR_TABLE_NAME + " (" +  Contrato.Trabajador._ID + "," + Contrato.Trabajador.NOMBRES + "," + Contrato.Trabajador.TELEFONO + ") " +
                     "VALUES (2,'Celeste','991329096')");
@@ -218,7 +218,7 @@ public class ProveedorDeContenido extends ContentProvider {
             db.execSQL("INSERT INTO " + TRABAJADOR_TABLE_NAME + " (" +  Contrato.Trabajador._ID + "," + Contrato.Trabajador.NOMBRES + "," + Contrato.Trabajador.TELEFONO + ") " +
                     "VALUES (7,'David','986606772')");
             db.execSQL("INSERT INTO " + TRABAJADOR_TABLE_NAME + " (" +  Contrato.Trabajador._ID + "," + Contrato.Trabajador.NOMBRES + "," + Contrato.Trabajador.TELEFONO + ") " +
-                    "VALUES (8,'Ronald','962370767')");
+                    "VALUES (8,'Ronald','962370767')");*/
 
             db.execSQL("INSERT INTO " + LOGIN_TABLE_NAME + " (" +  Contrato.Login._ID + "," + Contrato.Login.ID_TRABAJADOR_REGISTRO + "," + Contrato.Login.ESTADO + ") " +
                     "VALUES (1,0,0)");
@@ -453,6 +453,16 @@ public class ProveedorDeContenido extends ContentProvider {
                 break;
             case SINCRONIZACION_ALL_REGS:
                 table = SINCRONIZACION_TABLE_NAME;
+                break;
+
+            case TRABAJADOR_ONE_REG:
+                if (null == selection) selection = "";
+                selection += Contrato.Login._ID + " = "
+                        + uri.getLastPathSegment();
+                table = TRABAJADOR_TABLE_NAME;
+                break;
+            case TRABAJADOR_ALL_REGS:
+                table = TRABAJADOR_TABLE_NAME;
                 break;
         }
 

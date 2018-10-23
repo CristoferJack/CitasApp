@@ -7,8 +7,10 @@ import android.util.Log;
 import com.example.mdtk.citasapp.constantes.G;
 import com.example.mdtk.citasapp.pojo.Cita;
 import com.example.mdtk.citasapp.pojo.SincronizacionRegistro;
+import com.example.mdtk.citasapp.pojo.Trabajador;
 import com.example.mdtk.citasapp.proveedor.CitaProveedor;
 import com.example.mdtk.citasapp.proveedor.SincronizacionRegistroProveedor;
+import com.example.mdtk.citasapp.proveedor.TrabajadorProveedor;
 import com.example.mdtk.citasapp.volley.CitaVolley;
 
 import org.json.JSONArray;
@@ -93,7 +95,7 @@ public class Sincronizacion {
         CitaVolley.getAllCicloByHistorial();
     }
 
-    public static void realizarActualizacionesDelServidorUnaVezRecibidas(JSONArray jsonArray){
+    public static void realizarActualizacionesDelServidorUnaVezRecibidasCita(JSONArray jsonArray){
         Log.i("sincronizacion", "recibirActualizacionesDelServidor");
 
         try {
@@ -148,4 +150,5 @@ public class Sincronizacion {
             e.printStackTrace();
         }
     }
+
 }
