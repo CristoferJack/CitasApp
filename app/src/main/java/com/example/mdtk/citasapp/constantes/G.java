@@ -5,9 +5,9 @@ package com.example.mdtk.citasapp.constantes;
  */
 
 public class G {
-    //public static final String RUTA_SERVIDOR = "http://192.168.1.6:8080/TDEM_REST/Actividad"; // DESARROLLO
+    public static final String RUTA_SERVIDOR = "http://192.168.1.6:8080/TDEM_REST/Actividad"; // DESARROLLO
     //public static final String RUTA_SERVIDOR = "http://74.207.250.150/TDEM_REST/Actividad"; // UAT
-    public static final String RUTA_SERVIDOR = "http://104.237.150.20/TDEM_REST/Actividad"; // PRODUCCION
+    //public static final String RUTA_SERVIDOR = "http://104.237.150.20/TDEM_REST/Actividad"; // PRODUCCION
 
     public static final int SYNC_INTERVAL = 5;//1; <- versiones menores a 24
 
